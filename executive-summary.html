@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="de-AT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Executive Summary – Tourismusmonitor Vorarlberg</title>
+<meta name="description" content="BWS-Modell Tourismusmonitor: Executive Summary">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="vh-top"></div>
+<header class="vh"><div class="vh-in">
+<a class="vh-name" href="index.html">Tourismusmonitor <span>Vorarlberg</span></a>
+<nav class="vh-nav" aria-label="Seiten"><a href="index.html">Dashboard</a><a href="executive-summary.html" aria-current="page">Executive Summary</a><a href="modell.html">Modell</a><a href="kennzahlenproduktion.html">Kennzahlenproduktion</a></nav>
+<div class="vh-proto">Prototyp · Arbeitsstand</div>
+</div></header>
+<div class="wrap notoc">
+
+<main class="doc">
+<p class="kicker">Überblick</p>
+<h1 id="bws-modell-tourismusmonitor-executive-summary">BWS-Modell
+Tourismusmonitor: Executive Summary</h1>
+<p><em>Stand: 20. November 2026 · Moritz</em></p>
+<p><strong>Das Modell schätzt jeden Monat, wie viel Wertschöpfung der
+Tourismus in Vorarlberg erzeugt – je Branche und Region, rund zwei
+Monate nach Monatsende statt wie bisher zwei Jahre danach.</strong> Es
+nutzt nur Daten, die Betriebe ohnehin an Finanzamt, Sozialversicherung
+und Gemeinde melden, und wird jedes Jahr an die amtliche Statistik
+angeglichen.</p>
+<p>Die Grundidee ist einfach: Wertschöpfung = Umsatz minus eingekaufte
+Vorleistungen (Waren, Energie, Fremdleistungen, Miete). Den Umsatz
+kennen wir aus der Umsatzsteuer-Voranmeldung. Die Vorleistungen schätzen
+wir aus zwei Richtungen und mitteln sie.</p>
+<h2 id="was-das-modell-liefert">Was das Modell liefert</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Ergebnis</strong></td>
+<td>touristische Wertschöpfung (BWS) in Mio €, dazu je Nächtigung:
+Umsatz, BWS, Vorleistungen, Lohnsumme; Vorleistungsquote,
+Personalanteil, BWS je Beschäftigtem</td>
+</tr>
+<tr class="even">
+<td><strong>Gliederung</strong></td>
+<td>Land, Destination, Gemeinde × Beherbergung, Gastronomie,
+Bergbahn/Skischule, übrige</td>
+</tr>
+<tr class="odd">
+<td><strong>Zeiträume</strong></td>
+<td>Monat, laufende Saison (Winter Okt–Apr, Sommer Mai–Sep), gleitende
+12 Monate</td>
+</tr>
+<tr class="even">
+<td><strong>Erster Wert (Flash)</strong></td>
+<td>rund 25 Tage nach Monatsende, aus Nächtigungen, Lohnsummen und
+Preisen</td>
+</tr>
+<tr class="odd">
+<td><strong>Regulärer Wert</strong></td>
+<td>rund 55–60 Tage nach Monatsende, mit gemessenem Umsatz</td>
+</tr>
+<tr class="even">
+<td><strong>Endgültig</strong></td>
+<td>nach rund drei Jahren, wenn alle amtlichen Jahreszahlen
+vorliegen</td>
+</tr>
+</tbody>
+</table>
+<p>Veröffentlicht werden nur Summen mit mindestens zehn Betrieben je
+Zelle. Einzelbetriebe sind nie sichtbar.</p>
+<h2 id="so-funktioniert-es">So funktioniert es</h2>
+<figure class="flow">
+<svg class="tm-flow" viewBox="0 0 760 596" role="img" aria-label="Rechenweg in sechs Schritten: Umsatz minus Vorleistungen ergibt die BWS, die amtliche Statistik setzt das Niveau">
+<defs><marker id="tmah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9A9A9A"/></marker></defs>
+<g font-family="'IBM Plex Sans',Helvetica,Arial,sans-serif" font-size="13" fill="currentColor">
+<g fill="none" stroke="#9A9A9A" stroke-width="1.25" marker-end="url(#tmah)">
+<path d="M140 128V172"/><path d="M320 128V172"/><path d="M440 128V172"/><path d="M620 128V172"/>
+<path d="M195 260V292"/><path d="M565 260V292"/><path d="M195 364V396"/><path d="M565 364V396"/>
+<path d="M195 484V516"/><path d="M565 484V516"/> </g>
+<g fill="none" stroke="#9A9A9A" stroke-width="1.25">
+<rect x="30" y="72" width="220" height="56"/><rect x="270" y="72" width="220" height="56"/><rect x="510" y="72" width="220" height="56"/>
+<rect x="30" y="172" width="330" height="88"/><rect x="400" y="172" width="330" height="88"/>
+<rect x="30" y="396" width="330" height="88"/><rect x="400" y="396" width="330" height="88"/>
+<rect x="150" y="516" width="460" height="56"/> </g>
+<rect x="150" y="292" width="460" height="72" fill="#D81820" fill-opacity="0.08" stroke="#D81820" stroke-width="2"/>
+<text x="30" y="34" font-size="15" font-weight="600">Umsatz minus
+Vorleistungen ergibt die BWS, die Statistik setzt das Niveau</text>
+<text x="46" y="96" font-weight="600">Nächtigungen,
+Löhne</text><text x="46" y="114" font-size="11.5" fill="#5A5A5A">Preise;
+früh im Monat da</text>
+<text x="286" y="96" font-weight="600">Umsatzsteuer-Voranmeldung</text><text x="286" y="114" font-size="11.5" fill="#5A5A5A">Umsatz
+und Vorsteuer</text>
+<text x="526" y="96" font-weight="600">Strukturstatistik (LSE,
+IO)</text><text x="526" y="114" font-size="11.5" fill="#5A5A5A">Kostenstruktur
+je Branche</text> <text x="46" y="196" font-weight="600">1 ·
+Produktionswert</text><text x="46" y="216" font-size="11.5">gemessener
+Umsatz aus der UVA</text><text x="46" y="234" font-size="11.5">im Flash
+geschätzt aus Nächtigungen und Löhnen</text>
+<text x="416" y="196" font-weight="600">2 ·
+Vorleistungen</text><text x="416" y="216" font-size="11.5">Mix aus
+Strukturmodell (Kostenquote der
+LSE)</text><text x="416" y="234" font-size="11.5">und Vorsteuer-Signal
+der UVA</text>
+<text x="380" y="322" text-anchor="middle" font-size="14" font-weight="600">3
+· BWS = Produktionswert −
+Vorleistungen</text><text x="380" y="344" text-anchor="middle" font-size="11.5">aufgeteilt
+in Personalaufwand und Betriebsüberschuss</text>
+<text x="46" y="420" font-weight="600">4 · Kontrolle
+(Ampel)</text><text x="46" y="440" font-size="11.5">Kostenquote gegen
+LSE</text><text x="46" y="458" font-size="11.5">Personalkosten gegen
+amtliche Lohnquote</text> <text x="416" y="420" font-weight="600">5 ·
+Anbindung an amtliche
+Jahreswerte</text><text x="416" y="440" font-size="11.5">Niveau aus der
+Regionalen
+Gesamtrechnung</text><text x="416" y="458" font-size="11.5">Tourismusanteil
+aus dem Satellitenkonto</text>
+<text x="380" y="540" text-anchor="middle" font-weight="600">6 ·
+Kennzahlen im
+Dashboard</text><text x="380" y="558" text-anchor="middle" font-size="11.5" fill="#5A5A5A">Monat,
+Saison, 12 Monate · Land, Destination, Gemeinde</text> </g>
+</svg>
+<figcaption>
+Rechenweg in sechs Schritten
+</figcaption>
+</figure>
+<p>Die Schritte 1 bis 3 laufen jeden Monat je Betrieb. Schritt 5 greift
+einmal im Jahr, wenn neue amtliche Zahlen erscheinen, und korrigiert
+dann rückwirkend das Niveau aller Monate des Jahres.</p>
+<h2 id="woher-die-daten-kommen">Woher die Daten kommen</h2>
+<p>Kein Betrieb muss etwas Neues melden. Die Monatsdaten liefern die
+Bewegung, die Jahresstatistik das Niveau.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Quelle</th>
+<th>Was sie liefert</th>
+<th>Wie oft</th>
+<th>Rolle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Gästemeldungen, Beherbergungsstatistik</td>
+<td>Nächtigungen</td>
+<td>monatlich</td>
+<td>Nachfrage, Nenner der Kennzahlen</td>
+</tr>
+<tr class="even">
+<td>Sozialversicherung (mBGM)</td>
+<td>Lohnsumme, Beschäftigte</td>
+<td>monatlich</td>
+<td>Personal, Frühschätzung</td>
+</tr>
+<tr class="odd">
+<td>Umsatzsteuer-Voranmeldung (UVA)</td>
+<td>Umsatz, Vorsteuer</td>
+<td>monatlich</td>
+<td>Umsatz, Kostensignal</td>
+</tr>
+<tr class="even">
+<td>Preisindizes (VPI, Energie)</td>
+<td>Preise</td>
+<td>monatlich</td>
+<td>Fortschreibung der Kosten</td>
+</tr>
+<tr class="odd">
+<td>Leistungs- und Strukturstatistik (LSE)</td>
+<td>Kostenstruktur je Branche</td>
+<td>jährlich, ~18 Monate Verzug</td>
+<td>Vorleistungsquote, Kontrolle</td>
+</tr>
+<tr class="even">
+<td>Regionale Gesamtrechnung (RGR)</td>
+<td>amtliche BWS je Wirtschaftsbereich</td>
+<td>jährlich, ~12 Monate Verzug</td>
+<td>Niveau-Anker</td>
+</tr>
+<tr class="odd">
+<td>Tourismus-Satellitenkonto (RTSA)</td>
+<td>touristische BWS des Landes</td>
+<td>jährlich, ~22 Monate Verzug</td>
+<td>Tourismusanteil</td>
+</tr>
+</tbody>
+</table>
+<p>Die Verzugsangaben sind Näherungen und noch an den amtlichen
+Veröffentlichungskalendern zu prüfen.</p>
+<h2 id="warum-man-den-zahlen-trauen-kann">Warum man den Zahlen trauen
+kann</h2>
+<ul>
+<li><strong>Amtliches Niveau:</strong> Sobald die Regionale
+Gesamtrechnung und das Tourismus-Satellitenkonto erscheinen, wird das
+Modell auf deren Jahreswerte gesetzt. Die Monatsdaten bestimmen nur den
+Verlauf innerhalb des Jahres und die jüngsten Monate.</li>
+<li><strong>Zwei Schätzer für die Kosten:</strong> Strukturmodell
+(stabil, aber mit Jahresdaten) und Vorsteuer-Signal (aktuell, aber
+unruhig) werden gemischt. Das Mischgewicht wird geschätzt, sobald zwei
+Vergleichsjahre vorliegen; bis dahin 50:50.</li>
+<li><strong>Ampel je Zelle:</strong> Jede Region × Branche wird
+monatlich gegen unabhängige Statistik geprüft: Vorleistungsquote gegen
+LSE, Personalkosten gegen die amtliche Lohnquote. Gelb oder rot löst
+eine Prüfung aus.</li>
+<li><strong>Offene Revisionen:</strong> Jeder Wert trägt seinen Stand
+(Flash, regulär, vorläufig, endgültig) und wird bei jeder neuen
+amtlichen Zahl nachgerechnet. Geschätzte Werte erscheinen nie als
+Messung.</li>
+</ul>
+<h2 id="ausbaustufen">Ausbaustufen</h2>
+<p>Alle Stufen verwenden dieselben Formeln. Jede weitere Stufe macht die
+Werte für kleine Regionen und einzelne Branchen genauer.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Stufe</th>
+<th>Zusätzliche Daten</th>
+<th>Was sie bringt</th>
+<th>Voraussetzung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>0 · Öffentlich</strong></td>
+<td>nur veröffentlichte Statistik</td>
+<td>Monats-BWS je Branche für das Land</td>
+<td>keine, sofort möglich</td>
+</tr>
+<tr class="even">
+<td><strong>1 · Register</strong></td>
+<td>UVA und Lohnmeldungen je Betrieb</td>
+<td>Werte je Destination und Gemeinde</td>
+<td>Auftrag an die Statistikstelle</td>
+</tr>
+<tr class="odd">
+<td><strong>2 · Steuerdaten</strong></td>
+<td>jährliche Steuer-Mikrodaten</td>
+<td>eigene Kostenquote je Betrieb</td>
+<td>wie Stufe 1</td>
+</tr>
+<tr class="even">
+<td><strong>3 · Referenzpanel</strong></td>
+<td>freiwillige Buchhaltungsexporte weniger Betriebe</td>
+<td>gemessenes Kostenverhalten je Saison</td>
+<td>Einwilligung der Betriebe</td>
+</tr>
+</tbody>
+</table>
+<p>Der eigentliche Monitor beginnt mit Stufe 1. Die offene Frage dort
+ist der Auftrag an die Statistikstelle, keine neue Meldepflicht.</p>
+<h2 id="grenzen-und-offene-entscheidungen">Grenzen und offene
+Entscheidungen</h2>
+<ul>
+<li><strong>Vorleistungen bleiben geschätzt.</strong> Es gibt keine
+monatliche Meldung der Einkäufe. Bis Steuerdaten oder Panel vorliegen,
+haben alle Betriebe einer Branche dieselbe Kostenquote.</li>
+<li><strong>Saison- und Monatswerte schwanken stärker als
+Jahreswerte.</strong> In Schließmonaten wird die BWS negativ, weil
+Fixkosten weiterlaufen. Das ist gewollt.</li>
+<li><strong>Kleine Regionen</strong> hängen am Branchenmix und an der
+Geheimhaltung (mindestens zehn Betriebe).</li>
+<li><strong>Zu entscheiden:</strong>
+<ul>
+<li>Auftrag an die Statistikstelle für Stufe 1, inklusive
+Vorsteuer-Felder der UVA</li>
+<li>Bestellung der RTSA-Zusatztabelle je Branche beim WIFO</li>
+<li>Startwerte bis zur ersten Schätzung: Mischgewicht 50:50,
+Lohnnebenkosten-Aufschlag 30 %</li>
+</ul></li>
+</ul>
+<p>Die vollständige Methodik mit allen Formeln steht in der <a
+href="modell.html">Modellbeschreibung</a>, die Produktion der
+veröffentlichten Werte in der <a
+href="kennzahlenproduktion.html">Kennzahlenproduktion</a>. Das <a
+href="index.html">Dashboard</a> zeigt das Modell mit fiktiven Daten.</p>
+
+</main>
+</div>
+<footer class="vf"><div class="vf-in">Projekt „Tourismusmonitor Vorarlberg 2030“ · Arbeitsstand November 2026 · <a href="index.html">Dashboard</a> · <a href="executive-summary.html">Executive Summary</a> · <a href="modell.html">Modell</a> · <a href="kennzahlenproduktion.html">Kennzahlenproduktion</a><br>Keine amtliche Statistik und keine Veröffentlichung des Landes Vorarlberg oder von Vorarlberg Tourismus. Die Zahlen im Dashboard sind fiktiv.</div><div class="vf-bar"></div></footer>
+</body>
+</html>
