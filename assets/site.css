@@ -72,10 +72,10 @@ body{margin:0;background:#fff;color:var(--ink);font:300 16px/1.55 'IBM Plex Sans
 a{color:inherit}
 .vh-top{height:6px;background:var(--red)}
 .vh{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
-.vh-in{max-width:1240px;margin:0 auto;padding:14px 32px;display:flex;align-items:center;gap:32px;flex-wrap:wrap}
+.vh-in{max-width:1240px;margin:0 auto;padding:14px 32px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
 .vh-name{font-weight:600;font-size:17px;letter-spacing:.01em;white-space:nowrap}
 .vh-name span{color:var(--red)}
-.vh-nav{display:flex;gap:22px;flex-wrap:wrap;font-size:13px;text-transform:uppercase;letter-spacing:.08em}
+.vh-nav{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
 .vh-nav a{text-decoration:none;font-weight:400;padding:4px 0;border-bottom:2px solid transparent}
 .vh-nav a:hover,.vh-nav a[aria-current]{border-bottom-color:var(--red)}
 .vh-sub{border-top:1px solid var(--line);background:var(--panel)}

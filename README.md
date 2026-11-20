@@ -12,6 +12,7 @@ Monatliche Schätzung der touristischen Bruttowertschöpfung (BWS) aus Verwaltun
 | `executive-summary.html` | Überblick über das Modell in einfacher Form |
 | `modell.html` | Vollständige Modellbeschreibung mit allen Formeln (kombiniertes Modell) |
 | `kennzahlenproduktion.html` | Produktion der Kennzahlen: Variablen, Quellen, Erhebungsstrategie, Kalender, Rollen |
+| `referenzpanel.html` | Referenzpanel: zu erhebende Daten, Strukturparameter, Beispiel einer Lieferung, Lieferkalender; Anhang zum Export aus BMD und DATEV |
 
 Alle Seiten sind statisch und laden nichts von außen. Das Dashboard ist eine eigenständige Datei (Daten, d3 und Schrift eingebettet); die Unterseiten nutzen dieselben Stilregeln als `assets/site.css` (aus dem Dashboard übernommen) und die Schriften in `assets/fonts/`. Formeln sind MathML.
 

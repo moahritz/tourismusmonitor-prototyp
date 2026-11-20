@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="de-AT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tourismusmonitor Vorarlberg – Referenzpanel</title>
+<meta name="description" content="Referenzpanel Tourismusmonitor: zu erhebende Daten, Strukturparameter, Lieferkalender und Export aus BMD und DATEV">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* Ergänzungen für diese Seite, aufgebaut aus den Bausteinen von site.css */
+.rp-filters select{min-width:200px}
+.rp-count{font-size:13px;color:var(--grey);margin:0 0 8px}
+.rp-tbl td.rp-name{font-weight:600;white-space:nowrap}
+.rp-tbl td.rp-sym{font-family:ui-monospace,Menlo,monospace;font-size:13px;white-space:nowrap}
+.rp-chips{display:flex;flex-wrap:wrap;gap:4px}
+.rp-chip{display:inline-block;border:1px solid var(--ink);padding:0 6px;font-size:11px;font-weight:600;white-space:nowrap;cursor:pointer;background:#fff}
+.rp-chip.on{background:var(--red);border-color:var(--red);color:#fff}
+.rp-st{display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;white-space:nowrap}
+.rp-st-pflicht{background:var(--ink);color:#fff}
+.rp-st-optional{border:1px solid var(--ink)}
+.rp-st-vorschlag{border:1px dashed var(--red);color:var(--red)}
+.rp-st-register{background:var(--panel);color:var(--grey)}
+.rp-mx{border-collapse:collapse;font-size:13px;width:100%}
+.rp-mx th,.rp-mx td{border-bottom:1px solid var(--line);padding:6px 6px;text-align:center}
+.rp-mx th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--grey);font-weight:600;vertical-align:bottom}
+.rp-mx th.rp-pcol{cursor:pointer}
+.rp-mx th.rp-pcol.on{color:var(--red)}
+.rp-mx td:first-child,.rp-mx th:first-child{text-align:left;white-space:nowrap;width:30%}
+.rp-mx td.rp-grp{background:var(--panel);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--grey);font-weight:600;text-align:left}
+.rp-dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--ink)}
+.rp-dot.w{background:#fff;border:1.5px solid var(--ink)}
+.rp-mx tr.dim td{opacity:.28}
+.rp-mx td.hl{background:#FBEAEA}
+.rp-params{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:16px}
+.rp-param{background:#fff;border:1px solid var(--line);padding:14px 16px;cursor:pointer}
+.rp-param.on{border-color:var(--red);box-shadow:inset 0 3px 0 var(--red)}
+.rp-param h4{margin:0 0 2px;font-size:15px;font-weight:600}
+.rp-param p{margin:0;font-size:13px;color:var(--grey);line-height:1.45}
+.rp-param .rp-lag{margin-top:8px;font-size:12px;color:var(--ink);font-variant-numeric:tabular-nums}
+.rp-param .rp-lag b{color:var(--red);font-weight:600}
+.rp-toggle{display:inline-flex;border:1px solid var(--ink)}
+.rp-toggle button{font:400 14px 'IBM Plex Sans',sans-serif;background:#fff;border:0;padding:8px 14px;cursor:pointer;color:var(--ink)}
+.rp-toggle button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.rp-axis text{fill:var(--grey);font-size:12px}
+.rp-axis line,.rp-axis path{stroke:#BDBDBD}
+.tm-doc pre{background:#fff;border:1px solid var(--line);padding:12px 16px;overflow-x:auto;font-size:13px;line-height:1.5;margin:12px 0 20px}
+.tm-doc code{font-family:ui-monospace,Menlo,monospace;font-size:.92em}
+.rp-annex-mark{display:inline-block;background:var(--red);color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;margin:0 0 12px}
+</style>
+</head>
+<body>
+<div class="vh-top"></div>
+<header class="vh">
+  <div class="vh-in">
+    <div class="vh-name">Tourismusmonitor <span>Vorarlberg</span></div>
+    <nav class="vh-nav" aria-label="Seiten">
+      <a href="index.html">Dashboard</a><a href="executive-summary.html">Executive Summary</a><a href="modell.html">Modell</a><a href="kennzahlenproduktion.html">Kennzahlenproduktion</a><a href="referenzpanel.html" aria-current="page">Referenzpanel</a>
+    </nav>
+    <div class="vh-proto">Prototyp · fiktive Daten</div>
+  </div>
+  <nav class="vh-sub" aria-label="Auf dieser Seite"><div class="vh-sub-in"><a href="#ueberblick">Überblick</a><a href="#datenkatalog">Datenkatalog</a><a href="#parameter">Daten und Parameter</a><a href="#regeln">Regeln</a><a href="#beispiel">Beispiel einer Lieferung</a><a href="#kalender">Lieferkalender</a><a href="#anhang-export">Anhang: Export aus BMD und DATEV</a></div></nav>
+</header>
+
+<main class="page">
+<div class="tm">
+  <p class="tm-kicker">Referenzpanel</p>
+  <h1 class="tm-title">Was das Referenzpanel erhebt und wofür</h1>
+  <p class="tm-note">Stand: 20. November 2026 · Moritz · Methodik im <a href="modell.html#parameter-aus-dem-referenzpanel">Modell, Abschnitt 6.5</a>; Governance und Anreize im Konzept „Freiwilliges Referenzpanel“ vom 16. November 2026</p>
+  <p class="tm-lead">Rund <b>150 bis 300</b> freiwillige Betriebe liefern über ihre Steuerberatung einmal im Quartal Monatswerte zu <b>fünf Kostenblöcken</b> und ihren Investitionen. Alles andere verknüpft die Statistikstelle aus Registern. Das Panel liefert keine Werte für das Dashboard, sondern <b>acht Strukturparameter</b>, die heute 18 Monate bis rund 3 Jahre alt sind.</p>
+
+  <section class="tm-sec" id="ueberblick">
+    <div class="tm-tiles">
+      <div class="tm-tile"><p class="tm-tile-k">Felder vom Betrieb</p><p class="tm-tile-v" id="k-betrieb">–</p><p class="tm-tile-d" id="k-betrieb-d">–</p></div>
+      <div class="tm-tile"><p class="tm-tile-k">Aus Registern</p><p class="tm-tile-v" id="k-register">–</p><p class="tm-tile-d">kein Aufwand für den Betrieb</p></div>
+      <div class="tm-tile"><p class="tm-tile-k">Strukturparameter</p><p class="tm-tile-v">8</p><p class="tm-tile-d">plus Gewichte der Hochrechnung</p></div>
+      <div class="tm-tile"><p class="tm-tile-k">Lieferung</p><p class="tm-tile-v">4<span class="tm-tile-u">× im Jahr</span></p><p class="tm-tile-d">Monatswerte, Ziel ≤ 1 h je Quartal</p></div>
+      <div class="tm-tile"><p class="tm-tile-k">Nicht erhoben</p><p class="tm-tile-v" style="font-size:20px!important;line-height:1.35">Umsatz, Löhne, Gewinn</p><p class="tm-tile-d">kommen aus UVA und mBGM bzw. werden nicht gebraucht</p></div>
+    </div>
+  </section>
+
+  <section class="tm-sec" id="datenkatalog">
+    <h2 class="tm-h2">Datenkatalog</h2>
+    <p class="tm-sub">Alle Größen, die für die Panelparameter gebraucht werden: was der Betrieb liefert, was als Ergänzung vorgeschlagen ist und was die Statistikstelle aus Registern verknüpft. Ein Klick auf einen Parameter-Chip filtert Katalog und Matrix.</p>
+    <div class="tm-controls rp-filters">
+      <label>Herkunft
+        <select class="dash-select" id="f-herkunft">
+          <option value="alle">Alle Quellen</option>
+          <option value="Betrieb">Lieferung des Betriebs</option>
+          <option value="Register">Register (Statistikstelle)</option>
+        </select>
+      </label>
+      <label>Status
+        <select class="dash-select" id="f-status">
+          <option value="alle">Alle</option>
+          <option value="Pflicht">Pflicht im Panel</option>
+          <option value="optional">Optional</option>
+          <option value="Vorschlag">Vorschlag (noch nicht im Konzept)</option>
+          <option value="Register">Register</option>
+        </select>
+      </label>
+      <label>Verbessert Parameter
+        <select class="dash-select" id="f-param"></select>
+      </label>
+    </div>
+    <p class="rp-count" id="rp-count"></p>
+    <div class="tm-card tm-tblwrap" style="background:#fff!important;padding:0">
+      <table class="tm-tbl rp-tbl">
+        <thead><tr><th>Größe</th><th>Symbol</th><th>Inhalt</th><th>Herkunft</th><th>Status</th><th>Takt · Verzug</th><th>Verbessert</th></tr></thead>
+        <tbody id="rp-katalog"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tm-sec" id="parameter">
+    <h2 class="tm-h2">Daten und Parameter</h2>
+    <p class="tm-sub">Welche Größe welchen Parameter trägt. Gefüllter Punkt: Größe ist für die Schätzung nötig. Offener Punkt: Größe verbessert die Schätzung, ist aber nicht zwingend. Ein Klick auf einen Spaltenkopf oder eine Parameterkarte hebt die Spalte hervor. Formelnummern beziehen sich auf die <a href="modell.html#parameter-aus-dem-referenzpanel">Modellbeschreibung</a>.</p>
+    <div class="tm-card tm-tblwrap" style="background:#fff!important;padding:8px 0 0">
+      <table class="rp-mx" id="rp-matrix"></table>
+    </div>
+    <div class="rp-params" id="rp-params"></div>
+  </section>
+
+  <section class="tm-sec">
+    <h2 class="tm-h2" id="regeln">Regeln für den Einsatz der Panelwerte</h2>
+    <div class="tm-card tm-tblwrap"><table class="tm-tbl">
+      <tbody>
+        <tr><td><strong>Gate G2</strong></td><td>Panelwerte gehen erst in den Monitor ein, wenn das Backtesting im Pilot einen kleineren Fehler zeigt. Vorschlag: Fehler der Monatsvorleistungen mindestens 20 % kleiner in Beherbergung, Gastronomie und Bergbahn, geprüft mit Kreuzvalidierung je Destination. Bis dahin gilt W = 0, μ = 1 und π = 1/3.</td></tr>
+        <tr><td><strong>Mischung</strong></td><td>Panelwerte ersetzen amtliche Werte nicht, sondern werden nach ihrer Genauigkeit gemischt (Gewicht W, Modell Formel 6.9); in den ersten zwei Panelsaisonen höchstens 0,5. Das Niveau der Vorleistungsquote bleibt bei der LSE.</td></tr>
+        <tr><td><strong>Rückwirkung</strong></td><td>Ein neuer Parameterstand gilt ab dem nächsten regulären Wert und rückwirkend für die gemessene Saison; jeder Wert trägt seinen Parameterstand.</td></tr>
+        <tr><td><strong>Ebene</strong></td><td>Geschätzt wird je Tourismusgruppe, nicht je Schicht oder Destination. Seilbahnen: Vollerhebung aller Betreiber prüfen statt Stichprobe.</td></tr>
+        <tr><td><strong>Voraussetzung</strong></td><td>Stufe 1: Die Statistikstelle verknüpft UVA (inklusive Vorsteuer) und mBGM. Ohne diesen Zugang lassen sich s̄, κ und π nicht schätzen, und das Panel müsste Umsätze abfragen.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="tm-note">Mischung, Rückwirkung und Voraussetzung sind seit 20. November 2026 festgelegt; die Zielwerte für Gate G2 sind noch ein Vorschlag.</p>
+  </section>
+
+  <section class="tm-sec" id="beispiel">
+    <h2 class="tm-h2">Beispiel einer Lieferung</h2>
+    <p class="tm-sub">Ein fiktiver Hotelbetrieb mit Winter- und Sommersaison, Saisonjahr Oktober bis September, Vorleistungen in Tausend Euro je Leistungsmonat. Die Ansicht „nach Kostenverhalten“ zeigt, was das Panel misst: wie viel der Kosten fix ist, mit den Öffnungstagen läuft oder mit dem Umsatz steigt (φ). Ohne Panel kommt diese Aufteilung aus der österreichischen Input-Output-Tabelle.</p>
+    <div class="tm-controls" style="margin-bottom:16px!important">
+      <div class="rp-toggle" role="group" aria-label="Ansicht">
+        <button type="button" data-view="block" aria-pressed="true">nach Kostenblock</button><button type="button" data-view="typ" aria-pressed="false">nach Kostenverhalten</button>
+      </div>
+    </div>
+    <div class="tm-card" style="background:#fff!important;padding:16px 8px 8px">
+      <div class="tm-legend" id="rp-legend" style="padding-left:12px"></div>
+      <div class="tm-chart" id="rp-chart" style="min-height:340px"></div>
+    </div>
+    <p class="tm-note" id="rp-chart-note"></p>
+  </section>
+
+  <section class="tm-sec" id="kalender">
+    <h2 class="tm-h2">Lieferkalender</h2>
+    <p class="tm-sub">Vier Lieferungen im Jahr, jeweils rund einen Monat nach Quartalsende. Neue Parameter werden zweimal gesetzt, sobald eine Saison vollständig geliefert ist, und gelten rückwirkend für die gemessene Saison (Revision 1); Lieferungen mitten in der Saison dienen nur der Prüfung. Wie das in die Revisionskette passt, steht im <a href="modell.html#produktionskalender-und-revisionskette">Modell, Abschnitt 13</a>.</p>
+    <div class="tm-card" style="background:#fff!important;padding:16px 8px 8px">
+      <div class="tm-legend" style="padding-left:12px">
+        <span><i style="background:#E8E8E8"></i>Wintersaison Okt–Apr</span>
+        <span><i style="background:#F4F4F4;border:1px solid #DCDCDC"></i>Sommersaison Mai–Sep</span>
+        <span><i style="background:#1A1A1A"></i>Lieferung (Quartal)</span>
+        <span><i style="background:#D81820"></i>Parameter neu gesetzt</span>
+      </div>
+      <div class="tm-chart" id="rp-cal" style="min-height:216px"></div>
+    </div>
+  </section>
+
+  <!-- ===================== Anhang ===================== -->
+  <section class="tm-sec tm-doc" id="anhang-export" style="max-width:60rem">
+    <span class="rp-annex-mark">Anhang</span>
+    <h2 class="tm-h2" style="margin-top:8px!important">Export aus BMD und DATEV</h2>
+    <p><strong>Vorschlag:</strong> Die Steuerberatung exportiert keine fertig zugeordneten Kostenblöcke, sondern die Monatsbewegungen der Sachkonten, die sie ohnehin führt. Die Zuordnung zu den fünf Blöcken, zu fix, öffnungs- und umsatzabhängig und zu „mit oder ohne Vorsteuer“ macht die Statistikstelle zentral über eine Mapping-Tabelle. So bleibt der Aufwand in der Kanzlei bei einem Export auf Knopfdruck und einer Freigabe.</p>
+
+    <h3 class="tm-h3">A.1 Warum Kontensalden statt fertiger Blöcke</h3>
+    <ul>
+      <li><strong>Kein Zuordnen in der Kanzlei.</strong> Die Zuordnung je Konto passiert einmal zentral und gilt für alle Betriebe mit demselben Kontenplan. Ändert sich das Mapping, wird neu gerechnet, ohne neue Lieferung.</li>
+      <li><strong>Standardfunktion statt Sonderprogrammierung.</strong> Eine Summen- und Saldenliste als CSV können beide Programme heute schon ausgeben; BMD exportiert Saldenliste und Anlagevermögen als CSV (laut <a href="https://www.datev.de/content/dam/markenassets/themen-und-produktgruppen/zielgruppen/steuerberater/rechnungswesen/exportanleitungen/bmd-rechnungswesen-exportanleitung.pdf">DATEV-Exportanleitung für BMD</a>). Neu ist nur eine gespeicherte Exportvorlage mit festen Einstellungen.</li>
+      <li><strong>Datensparsam.</strong> Exportiert werden nur die Kontenklassen 0 (Zugänge), 5 und 7 des Einheitskontenrahmens. Erlöse (Klasse 4), Personal (Klasse 6), Finanzergebnis (8) und Kapital (9) bleiben in der Kanzlei. Keine Buchungszeilen, keine Belege, keine Personenkonten.</li>
+      <li><strong>Gleiche Logik für beide Programme.</strong> BMD-Kontenpläne folgen dem österreichischen Einheitskontenrahmen, DATEV bietet mit dem <a href="https://www.datev.de/web/de/datev-shop/material/kontenrahmen-skr-07-oesterreich/">SKR 07</a> einen Kontenrahmen in Anlehnung daran. Eine Mapping-Tabelle je Standardkontenplan reicht; mandantenspezifische Zusatzkonten werden beim Einstieg einmal nachgetragen.</li>
+    </ul>
+
+    <h3 class="tm-h3">A.2 Das Lieferpaket</h3>
+    <p>Ein Paket je Betrieb und Quartal, als ZIP mit drei Pflichtdateien und einer optionalen Datei. Rund 150 Sachkonten × 3 Monate ergeben weniger als 500 Zeilen.</p>
+    <div class="tm-card tm-tblwrap"><table class="tm-tbl">
+      <thead><tr><th>Datei</th><th>Inhalt</th><th>Quelle im Programm</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>kopf.json</code></td><td>Panel-ID, Zeitraum, Programm und Version, Kontenplan, Abgrenzung periodengerecht ja/nein, Freigabe durch Kanzlei, Prüfsumme</td><td>Exportvorlage</td><td><span class="rp-st rp-st-pflicht">Pflicht</span></td></tr>
+        <tr><td><code>salden.csv</code></td><td>Monatsverkehr Soll und Haben je Sachkonto der Klassen 0, 5, 7</td><td>Summen- und Saldenliste, Monatswerte</td><td><span class="rp-st rp-st-pflicht">Pflicht</span></td></tr>
+        <tr><td><code>konten.csv</code></td><td>Kontenstamm: Konto, Bezeichnung, Klasse, Steuercode</td><td>Kontenplan bzw. Kontenbeschriftungen</td><td><span class="rp-st rp-st-pflicht">Pflicht</span></td></tr>
+        <tr><td><code>abgrenzung.csv</code></td><td>Monatssumme der Abgrenzungsbuchungen je Konto (Waren, Energie)</td><td>Saldenliste, gefiltert auf den Belegkreis der Abgrenzungen</td><td><span class="rp-st rp-st-vorschlag">Vorschlag</span></td></tr>
+      </tbody>
+    </table></div>
+    <p>Die Datei enthält keine Steuernummer und keinen Namen. Die Panel-ID vergibt die Statistikstelle bei der Anmeldung und verknüpft sie dort mit Steuernummer und Dienstgebernummer; die Kanzlei trägt sie einmal im Mandantenstamm ein.</p>
+
+    <h3 class="tm-h3">A.3 Aufbau der Dateien (Beispiel, fiktive Werte)</h3>
+    <p><code>salden.csv</code> – Semikolon getrennt, UTF-8, Dezimalpunkt, Beträge netto in Euro:</p>
+<pre><code>panel_id;jahr;monat;konto;soll;haben
+RP-0417;2027;1;5100;48210.40;0.00
+RP-0417;2027;1;5300;9120.00;310.50
+RP-0417;2027;1;7400;14500.00;0.00
+RP-0417;2027;1;0400;0.00;0.00
+RP-0417;2027;2;5100;51034.10;0.00</code></pre>
+    <p><code>konten.csv</code> – der Steuercode ist das Feld, aus dem die Statistikstelle „mit oder ohne Vorsteuer“ ableitet:</p>
+<pre><code>konto;bezeichnung;klasse;steuercode
+5100;Wareneinsatz Küche;5;VST10
+5300;Energie Strom;5;VST20
+7400;Miete Betriebsgebäude;7;OHNE
+7700;Versicherungen;7;OHNE
+0400;Betriebs- und Geschäftsausstattung;0;VST20</code></pre>
+    <p class="tm-note">Kontonummern und Bezeichnungen sind Platzhalter. Die gültige Zuordnung wird im Pilot gegen das Fachgutachten KFS/BW 6 (Einheitskontenrahmen) und den SKR 07 festgelegt.</p>
+    <p><code>kopf.json</code> – erzeugt von der Exportvorlage oder beim Upload:</p>
+<pre><code>{
+  "panel_id": "RP-0417",
+  "zeitraum": { "von": "2027-01", "bis": "2027-03" },
+  "programm": "BMD NTCS", "version": "…",
+  "kontenplan": "EKR-Standard",
+  "abgrenzung_periodengerecht": true,
+  "freigabe": { "kanzlei_id": "K-031", "datum": "2027-04-24" },
+  "pruefsumme_sha256": "…"
+}</code></pre>
+
+    <h3 class="tm-h3">A.4 Zentrale Mapping-Tabelle</h3>
+    <p>Die Statistikstelle führt eine Tabelle je Standardkontenplan. Jede Zeile ordnet einen Kontenbereich genau einem Block und einem Kostenverhalten zu; der Vorsteuer-Status kommt aus dem Steuercode des Kontos, nicht aus der Tabelle.</p>
+    <div class="tm-card tm-tblwrap"><table class="tm-tbl">
+      <thead><tr><th>Kontenbereich (Beschreibung)</th><th>Block</th><th>Kostenverhalten (Startwert)</th><th>Hinweis</th></tr></thead>
+      <tbody>
+        <tr><td>Wareneinsatz Speisen, Getränke, Handelsware (Klasse 5)</td><td>W</td><td>umsatzabhängig</td><td>Bestandsveränderung mitnehmen, falls monatlich gebucht</td></tr>
+        <tr><td>Strom, Gas, Fernwärme, Heizöl, Treibstoff (Klasse 5 bzw. 7)</td><td>E</td><td>öffnungsabhängig; Grundgebühr fix</td><td>getrennte Konten für Grundpreis, wo vorhanden</td></tr>
+        <tr><td>Fremdleistungen: Reinigung, Wäsche, Fremdpersonal, Beschneiung durch Dritte</td><td>F</td><td>öffnungs- bzw. umsatzabhängig</td><td>Wäsche je Belegung: umsatzabhängig</td></tr>
+        <tr><td>Instandhaltung, Wartungsverträge</td><td>F</td><td>öffnungsabhängig bzw. fix</td><td>Wartungsverträge fix</td></tr>
+        <tr><td>Miete, Pacht, Leasing</td><td>M</td><td>fix</td><td>oft ohne Vorsteuer, daher zus</td></tr>
+        <tr><td>Provisionen, Buchungsplattformen, Kartengebühren</td><td>S</td><td>umsatzabhängig</td><td>–</td></tr>
+        <tr><td>Versicherungen, Beratung, Software, Marketing, Gebühren</td><td>S</td><td>fix</td><td>Versicherungen ohne Vorsteuer</td></tr>
+        <tr><td>Anlagenzugänge (Soll-Verkehr Klasse 0)</td><td>I</td><td>–</td><td>Umbuchungen innerhalb Klasse 0 herausrechnen</td></tr>
+        <tr><td>Abschreibungen, Personal, Zinsen, Steuern</td><td>–</td><td>–</td><td>nicht im Export; keine Vorleistungen</td></tr>
+      </tbody>
+    </table></div>
+    <p>„Startwert“ heißt: Die Zuordnung zum Kostenverhalten ist nur der Anfang. Das Panel schätzt φ aus den gemessenen Monatsverläufen (Modell, Formel 6.8); die Tabelle dient dort als Prüfung und als Rückfall, wenn ein Block zu dünn besetzt ist.</p>
+
+    <h3 class="tm-h3">A.5 Umsetzung in den Programmen</h3>
+    <div class="tm-card tm-tblwrap"><table class="tm-tbl">
+      <thead><tr><th>Schritt</th><th>BMD NTCS</th><th>DATEV (Kanzlei-Rechnungswesen, SKR 07)</th></tr></thead>
+      <tbody>
+        <tr><td>Einmalig je Kanzlei</td><td>Exportvorlage „Referenzpanel“ hinterlegen: Saldenliste mit Monatsverkehr, Klassen 0, 5, 7, CSV; Kontenstamm mit Steuercode</td><td>Exportprofil für die Summen- und Saldenliste mit Monatswerten, Kontenklassen 0, 5, 7; Kontenbeschriftungen mit Steuerschlüssel</td></tr>
+        <tr><td>Einmalig je Mandant</td><td>Panel-ID im Mandantenstamm, Mandant der Gruppe „Referenzpanel“ zuordnen</td><td>Panel-ID im Mandantenstamm, Mandant einer Auswahlliste zuordnen</td></tr>
+        <tr><td>Je Quartal</td><td>Export für alle Mandanten der Gruppe; Sichtprüfung der Summen; Freigabe</td><td>Export je Mandant oder als Serienlauf; Sichtprüfung; Freigabe</td></tr>
+        <tr><td>Übermittlung</td><td colspan="2">Upload des ZIP im verschlüsselten Portal der Statistikstelle; keine E-Mail. Die Prüfsumme im Kopf sichert, dass nichts verändert wurde.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Offen und mit BMD und DATEV zu klären: ob der Export für eine Mandantengruppe in einem Lauf möglich ist, ob die Panel-ID in einem vorhandenen Stammdatenfeld Platz hat und ob sich Kopf und Prüfsumme direkt aus dem Programm erzeugen lassen. Wenn nicht, erzeugt ein kleines Werkzeug der Statistikstelle den Kopf beim Upload aus den Eingaben der Kanzlei.</p>
+
+    <h3 class="tm-h3">A.6 Automatische Prüfungen beim Upload</h3>
+    <div class="tm-card tm-tblwrap"><table class="tm-tbl">
+      <thead><tr><th>Prüfung</th><th>Regel</th><th>Folge</th></tr></thead>
+      <tbody>
+        <tr><td>Vollständigkeit</td><td>alle drei Monate des Quartals vorhanden, jedes Konto in <code>salden.csv</code> auch in <code>konten.csv</code></td><td>Upload abgelehnt</td></tr>
+        <tr><td>Unbekannte Konten</td><td>Konto nicht in der Mapping-Tabelle</td><td>angenommen; Rückfrage an die Kanzlei zur Zuordnung</td></tr>
+        <tr><td>Sprung</td><td>Block im Monat über dem 3-fachen des Vorjahresmonats bzw. des Medians</td><td>Hinweis an die Kanzlei, Wert bleibt bis zur Klärung markiert</td></tr>
+        <tr><td>Abgrenzung</td><td>Energie in einem Monat mit Öffnungstagen null oder Ware ohne Umsatz laut UVA</td><td>Hinweis: Rechnungs- statt Leistungsmonat?</td></tr>
+        <tr><td>Abgleich Vorsteuer</td><td>vorsteuerbelastete Einkäufe × Steuersatz gegen die Vorsteuer der UVA desselben Quartals, Abweichung über 15 %</td><td>Hinweis; wichtig für s̄ und κ</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="tm-h3">A.7 Aufwand (Schätzung, im Pilot zu messen)</h3>
+    <div class="tm-card tm-tblwrap"><table class="tm-tbl">
+      <thead><tr><th>Tätigkeit</th><th class="n">Einmalig</th><th class="n">Je Quartal</th></tr></thead>
+      <tbody>
+        <tr><td>Exportvorlage einrichten (je Kanzlei)</td><td class="n">1–2 h</td><td class="n">–</td></tr>
+        <tr><td>Mandant anmelden, Panel-ID, Zusatzkonten zuordnen</td><td class="n">≈ 30 min</td><td class="n">–</td></tr>
+        <tr><td>Export, Sichtprüfung, Freigabe, Upload</td><td class="n">–</td><td class="n">10–20 min</td></tr>
+        <tr><td>Rückfragen aus den Prüfungen</td><td class="n">–</td><td class="n">0–30 min</td></tr>
+      </tbody>
+    </table></div>
+    <p>Voraussetzung für die Quartalswerte ist, dass die Buchhaltung des Quartals beim Export abgeschlossen und periodengerecht abgegrenzt ist. Für Betriebe, deren Kanzlei nur zum Jahresabschluss abgrenzt, gilt die saisonale Mindestlieferung aus dem Konzept; ihre Daten gehen dann nur in Saisonwerte ein, nicht in Monatswerte.</p>
+    <p class="tm-note">Quellen: <a href="https://www.datev.de/content/dam/markenassets/themen-und-produktgruppen/zielgruppen/steuerberater/rechnungswesen/exportanleitungen/bmd-rechnungswesen-exportanleitung.pdf">DATEV, Exportanleitung BMD Rechnungswesen</a> (Saldenliste und Anlagevermögen als CSV aus BMD) · <a href="https://www.datev.de/web/de/datev-shop/material/kontenrahmen-skr-07-oesterreich/">DATEV, Kontenrahmen SKR 07 Österreich</a> · <a href="https://freefinance.at/buchhaltung/kontenrahmen.html">FreeFinance, Österreichischer Einheitskontenrahmen</a> (Kontenklassen 0–9). Abgerufen am 20. November 2026.</p>
+  </section>
+</div>
+</main>
+
+<footer class="vf">
+  <div class="vf-in">
+    <div>
+      <h4>Über diesen Prototyp</h4>
+      <p>Veranschaulichung einer monatlichen Schätzung der touristischen Bruttowertschöpfung aus vorhandenen Verwaltungsdaten (UVA, Lohndaten, Beherbergungsstatistik), kalibriert am regionalen Tourismus-Satellitenkonto.</p>
+      <p><strong style="color:#fff">Alle Zahlen und Destinationen sind fiktiv.</strong> Die Seite ist keine amtliche Statistik und keine Veröffentlichung des Landes Vorarlberg oder von Vorarlberg Tourismus.</p>
+    </div>
+    <div>
+      <h4>Stand</h4>
+      <p>Arbeitsstand November 2026, kombiniertes Modell<br>Projekt „Tourismusmonitor Vorarlberg 2030“</p>
+      <p><a href="executive-summary.html" style="color:#fff">Executive Summary</a> · <a href="modell.html" style="color:#fff">Modell</a> · <a href="kennzahlenproduktion.html" style="color:#fff">Kennzahlenproduktion</a> · <a href="referenzpanel.html" style="color:#fff">Referenzpanel</a></p>
+    </div>
+  </div>
+  <div class="vf-bar"></div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var SVGNS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent){var e=document.createElementNS(SVGNS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+function fmt(x,d){return x.toLocaleString("de-AT",{minimumFractionDigits:d||0,maximumFractionDigits:d||0});}
+
+/* ---------- Parameter ---------- */
+var P=[
+ {id:"phi",sym:"φ",name:"Kostenverhalten φᶠ, φᴼ, φᵁ",f:"6.3; Schätzung 6.8",d:"Anteil fixer, öffnungs- und umsatzabhängiger Vorleistungen; verteilt die Jahreskosten auf die Monate.",heute:"IO-Tabelle, Österreich, ≈ 3 Jahre",panel:"2–3 Monate nach Saisonende"},
+ {id:"omega",sym:"ω",name:"Struktur der Vorleistungen ω",f:"6.2; Schätzung 6.10",d:"Anteile von Waren, Energie, Fremdleistungen, Miete, Sonstigem; Gewichte der Preisfortschreibung.",heute:"IO-Tabelle, Österreich, ≈ 3 Jahre",panel:"2–3 Monate"},
+ {id:"kappa",sym:"κ",name:"Gewicht des Vorsteuer-Signals κ",f:"6.5; Schätzung 6.12",d:"Mischt Strukturmodell und Vorsteuer-Signal im regulären Stand.",heute:"Startwert 0,5; empirisch erst ab zwei LSE-Jahren",panel:"ab Pilot (24 Monate rückwirkend)"},
+ {id:"sbar",sym:"s̄",name:"Effektiver Vorsteuersatz s̄",f:"4.4; Schätzung 6.11",d:"Rechnet die Vorsteuer der UVA in Einkäufe um.",heute:"IO-Tabelle, ≈ 3 Jahre",panel:"2–3 Monate"},
+ {id:"inv",sym:"inv",name:"Investitionsanteil inv",f:"6.4; Schätzung 6.11",d:"Teil der vorsteuerbelasteten Einkäufe, der Investition ist und keine Vorleistung.",heute:"LSE, ≈ 18 Monate",panel:"2–3 Monate"},
+ {id:"zus",sym:"zus",name:"Vorleistungen ohne Vorsteuer zus",f:"6.4; Schätzung 6.11",d:"Zuschlag für Versicherungen, Bankgebühren, Mieten ohne Umsatzsteuer.",heute:"Bilanzdatenbank, IO-Tabelle, 12 Monate bis 3 Jahre",panel:"2–3 Monate"},
+ {id:"mu",sym:"μ",name:"Mengenintensität μ",f:"6.2, 6.2a",d:"Veränderung der realen Vorleistungen je Einheit Produktion, z. B. Energiesparen.",heute:"μ = 1 (konstant); Änderung zeigt erst die nächste LSE, ≈ 18 Monate",panel:"2–3 Monate"},
+ {id:"pi",sym:"π",name:"Zeitprofil der Vorsteuer π",f:"4.4; Schätzung 6.13",d:"Verzögerung zwischen Rechnung und Verbrauch; ersetzt die feste 3-Monats-Glättung und prüft die Kappung.",heute:"Startwert je 1/3 (3 Monate), Kappung beim 3-fachen Median",panel:"ab Pilot"},
+ {id:"w",sym:"w",name:"Gewichte der Hochrechnung w",f:"6.7",d:"Gleicht die Auswahl der Panelbetriebe nach Branche und Größe aus.",heute:"–",panel:"je Lieferung"}
+];
+var PI={};P.forEach(function(p){PI[p.id]=p;});
+
+/* ---------- Datenkatalog: 2 = nötig, 1 = verbessert ---------- */
+var D=[
+ {g:"Lieferung des Betriebs",sym:"V(W)",name:"Waren",inh:"Lebensmittel, Getränke, Handelsware",her:"Betrieb",st:"Pflicht",takt:"Monatswerte, quartalsweise · 1–3 Monate",p:{omega:2,phi:2,mu:2,kappa:2,sbar:2}},
+ {g:"Lieferung des Betriebs",sym:"V(E)",name:"Energie",inh:"Strom, Gas, Fernwärme, Heizöl, Treibstoff",her:"Betrieb",st:"Pflicht",takt:"Monatswerte, quartalsweise · 1–3 Monate",p:{omega:2,phi:2,mu:2,kappa:2,sbar:2}},
+ {g:"Lieferung des Betriebs",sym:"V(F)",name:"Fremdleistungen",inh:"Reinigung, Wäsche, Instandhaltung, Fremdpersonal, Beschneiung durch Dritte",her:"Betrieb",st:"Pflicht",takt:"Monatswerte, quartalsweise · 1–3 Monate",p:{omega:2,phi:2,mu:2,kappa:2,sbar:2}},
+ {g:"Lieferung des Betriebs",sym:"V(M)",name:"Miete",inh:"Miete, Pacht, Leasing",her:"Betrieb",st:"Pflicht",takt:"Monatswerte, quartalsweise · 1–3 Monate",p:{omega:2,phi:2,mu:2,kappa:2,zus:1}},
+ {g:"Lieferung des Betriebs",sym:"V(S)",name:"Sonstiges",inh:"Versicherungen, Beratung, Marketing, Provisionen, Kartengebühren, Gebühren",her:"Betrieb",st:"Pflicht",takt:"Monatswerte, quartalsweise · 1–3 Monate",p:{omega:2,phi:2,mu:2,kappa:2,sbar:2,zus:1}},
+ {g:"Lieferung des Betriebs",sym:"I",name:"Anlagenzugänge",inh:"Investitionen des Monats",her:"Betrieb",st:"Pflicht",takt:"Monatswerte, quartalsweise · 1–3 Monate",p:{inv:2,sbar:2,pi:1}},
+ {g:"Lieferung des Betriebs",sym:"O",name:"Öffnungstage",inh:"Tage mit Betrieb; Beschneiungstage bei Seilbahnen",her:"Betrieb",st:"optional",takt:"Monatswerte · sonst aus Registern",p:{phi:1}},
+ {g:"Lieferung des Betriebs",sym:"kWh",name:"Energieverbrauch",inh:"Verbrauch Strom, Gas, Wärme aus den Energierechnungen",her:"Betrieb",st:"optional",takt:"Monatswerte · nicht aus der Buchhaltung",p:{mu:1}},
+ {g:"Vorschläge zur Ergänzung",sym:"ohne VSt",name:"Kennzeichen „ohne Vorsteuer“",inh:"je Konto aus dem Steuercode, z. B. Versicherungen, unecht befreite Mieten",her:"Betrieb",st:"Vorschlag",takt:"mit dem Kontenstamm · kein Zusatzaufwand",p:{zus:2,sbar:1}},
+ {g:"Vorschläge zur Ergänzung",sym:"E fix/var",name:"Energie Grund- und Arbeitspreis",inh:"getrennte Konten, wo vorhanden",her:"Betrieb",st:"Vorschlag",takt:"mit den Salden",p:{phi:1}},
+ {g:"Vorschläge zur Ergänzung",sym:"Abgr.",name:"Abgrenzungsbuchungen",inh:"Monatssumme der Abgrenzungen für Waren und Energie",her:"Betrieb",st:"Vorschlag",takt:"mit den Salden · im Pilot Aufwand messen",p:{pi:2}},
+ {g:"Aus Registern",sym:"U",name:"Umsatz",inh:"Nettoumsatz nach Steuersätzen laut UVA; ergibt den Produktionswert",her:"Register",st:"Register",takt:"monatlich · ≈ 45 Tage",p:{phi:2,mu:2,w:2}},
+ {g:"Aus Registern",sym:"VSt",name:"Vorsteuer",inh:"abziehbare Vorsteuer laut UVA",her:"Register",st:"Register",takt:"monatlich · ≈ 45 Tage",p:{kappa:2,sbar:2,pi:2,inv:1}},
+ {g:"Aus Registern",sym:"L, E",name:"Lohnsumme, Beschäftigte",inh:"laut mBGM; Personalintensität, Betriebstage",her:"Register",st:"Register",takt:"monatlich · ≈ 15 Tage",p:{phi:1}},
+ {g:"Aus Registern",sym:"N",name:"Nächtigungen",inh:"Gästemeldewesen; Öffnungstage der Beherbergung",her:"Register",st:"Register",takt:"monatlich · 1–5 Tage",p:{phi:2}},
+ {g:"Aus Registern",sym:"Stamm",name:"Stammdaten",inh:"ÖNACE, Größenklasse, Betten, Gemeinde und Destination",her:"Register",st:"Register",takt:"laufend",p:{w:2}}
+];
+
+/* ---------- Kacheln ---------- */
+var nB=D.filter(function(d){return d.her==="Betrieb"&&d.st!=="Vorschlag";}).length;
+var nPf=D.filter(function(d){return d.st==="Pflicht";}).length;
+var nVs=D.filter(function(d){return d.st==="Vorschlag";}).length;
+document.getElementById("k-betrieb").textContent=nB;
+document.getElementById("k-betrieb-d").textContent=nPf+" Pflicht, "+(nB-nPf)+" optional; "+nVs+" weitere vorgeschlagen";
+document.getElementById("k-register").textContent=D.filter(function(d){return d.her==="Register";}).length;
+
+/* ---------- Zustand ---------- */
+var S={her:"alle",st:"alle",param:"alle"};
+var fp=document.getElementById("f-param");
+fp.innerHTML='<option value="alle">Alle Parameter</option>'+P.map(function(p){return '<option value="'+p.id+'">'+p.name+'</option>';}).join("");
+function setParam(id){S.param=(S.param===id?"alle":id);fp.value=S.param;render();}
+document.getElementById("f-herkunft").addEventListener("change",function(e){S.her=e.target.value;render();});
+document.getElementById("f-status").addEventListener("change",function(e){S.st=e.target.value;render();});
+fp.addEventListener("change",function(e){S.param=e.target.value;render();});
+
+function pass(d){
+  if(S.her!=="alle"&&d.her!==S.her)return false;
+  if(S.st!=="alle"&&d.st!==S.st)return false;
+  if(S.param!=="alle"&&!d.p[S.param])return false;
+  return true;
+}
+function stClass(s){return "rp-st rp-st-"+s.toLowerCase();}
+
+function renderKatalog(){
+  var rows=D.filter(pass);
+  document.getElementById("rp-count").textContent=rows.length+" von "+D.length+" Größen"+(S.param!=="alle"?" · Parameter: "+PI[S.param].name:"");
+  document.getElementById("rp-katalog").innerHTML=rows.map(function(d){
+    var chips=P.filter(function(p){return d.p[p.id];}).map(function(p){
+      return '<span class="rp-chip'+(S.param===p.id?" on":"")+'" data-p="'+p.id+'" title="'+p.name+(d.p[p.id]===1?" (verbessert)":" (nötig)")+'">'+p.sym+'</span>';}).join("");
+    return '<tr><td class="rp-name">'+d.name+'</td><td class="rp-sym">'+d.sym+'</td><td>'+d.inh+'</td><td>'+(d.her==="Betrieb"?"Betrieb über Kanzlei":"Statistikstelle")+'</td><td><span class="'+stClass(d.st)+'">'+d.st+'</span></td><td>'+d.takt+'</td><td><div class="rp-chips">'+chips+'</div></td></tr>';
+  }).join("")||'<tr><td colspan="7" class="tm-muted">Keine Größe passt zu dieser Auswahl.</td></tr>';
+}
+
+function renderMatrix(){
+  var t=document.getElementById("rp-matrix");
+  var h='<thead><tr><th>Größe</th>'+P.map(function(p){return '<th class="rp-pcol'+(S.param===p.id?" on":"")+'" data-p="'+p.id+'" title="'+p.name+'">'+p.sym+'</th>';}).join("")+'</tr></thead><tbody>';
+  var g="";
+  D.forEach(function(d){
+    if(d.g!==g){g=d.g;h+='<tr><td class="rp-grp" colspan="'+(P.length+1)+'">'+g+'</td></tr>';}
+    var dim=!pass(d);
+    h+='<tr'+(dim?' class="dim"':'')+'><td>'+d.name+' <span class="tm-muted" style="font-family:ui-monospace,Menlo,monospace;font-size:12px">'+d.sym+'</span></td>'+P.map(function(p){
+      var v=d.p[p.id];var cls=S.param===p.id?' class="hl"':'';
+      return '<td'+cls+'>'+(v===2?'<span class="rp-dot" title="nötig"></span>':v===1?'<span class="rp-dot w" title="verbessert"></span>':'')+'</td>';}).join("")+'</tr>';
+  });
+  t.innerHTML=h+'</tbody>';
+}
+
+function renderParams(){
+  document.getElementById("rp-params").innerHTML=P.map(function(p){
+    return '<div class="rp-param'+(S.param===p.id?" on":"")+'" data-p="'+p.id+'" role="button" tabindex="0"><h4>'+p.name+'</h4><p>'+p.d+' <span class="tm-muted">Formel '+p.f+'</span></p><p class="rp-lag">Heute: '+p.heute+'<br>Mit Panel: <b>'+p.panel+'</b></p></div>';
+  }).join("");
+}
+
+document.addEventListener("click",function(e){var t=e.target.closest("[data-p]");if(t)setParam(t.getAttribute("data-p"));});
+document.addEventListener("keydown",function(e){if(e.key==="Enter"){var t=e.target.closest&&e.target.closest(".rp-param");if(t)setParam(t.getAttribute("data-p"));}});
+
+function render(){renderKatalog();renderMatrix();renderParams();}
+render();
+
+/* ---------- Beispiel einer Lieferung (fiktiv) ---------- */
+var M=["Okt","Nov","Dez","Jän","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep"];
+var O=[0,8,31,31,28,31,18,0,14,31,31,24];          // Öffnungstage
+var A=[0,.35,.95,1.0,1.1,.9,.45,0,.4,.8,.95,.55];   // Auslastung relativ
+var U=O.map(function(o,i){return o*A[i]*9.5;});      // Umsatz T€ (fiktiv)
+var B=[
+ {k:"W",name:"Waren",c:"#820E13",f:0,o:0,u:.16},
+ {k:"E",name:"Energie",c:"#D81820",f:1.4,o:.34,u:0},
+ {k:"F",name:"Fremdleistungen",c:"#E26A6F",f:.8,o:.22,u:.03},
+ {k:"M",name:"Miete, Pacht, Leasing",c:"#5A5A5A",f:9.5,o:0,u:0},
+ {k:"S",name:"Sonstiges",c:"#B9B9B9",f:2.6,o:0,u:.04}
+];
+var TY=[{k:"fix",name:"fix (φᶠ)",c:"#5A5A5A"},{k:"off",name:"öffnungsabhängig (φᴼ)",c:"#D81820"},{k:"ums",name:"umsatzabhängig (φᵁ)",c:"#820E13"}];
+var V=M.map(function(m,i){var r={m:m,o:O[i],u:U[i],b:{},t:{fix:0,off:0,ums:0}};
+  B.forEach(function(b){var fx=b.f,of=b.o*O[i],us=b.u*U[i];r.b[b.k]=fx+of+us;r.t.fix+=fx;r.t.off+=of;r.t.ums+=us;});return r;});
+var view="block";
+var chart=document.getElementById("rp-chart"),tip=document.createElement("div");tip.className="tm-tip";tip.style.display="none";chart.appendChild(tip);
+
+function drawChart(){
+  var old=chart.querySelector("svg");if(old)old.remove();
+  var W=Math.max(chart.clientWidth,320),H=356,m={t:28,r:52,b:34,l:48},iw=W-m.l-m.r,ih=H-m.t-m.b;
+  var svg=el("svg",{width:W,height:H,role:"img","aria-label":"Vorleistungen des Beispielbetriebs je Monat"});chart.insertBefore(svg,tip);
+  var series=view==="block"?B.map(function(b){return {k:b.k,name:b.name,c:b.c,v:function(r){return r.b[b.k];}};}):TY.map(function(t){return {k:t.k,name:t.name,c:t.c,v:function(r){return r.t[t.k];}};});
+  var tot=V.map(function(r){return series.reduce(function(s,se){return s+se.v(r);},0);});
+  var ymax=Math.ceil(Math.max.apply(null,tot)/10)*10, y=function(v){return m.t+ih-v/ymax*ih;};
+  var bw=iw/12, g=el("g",{},svg);
+  for(var t=0;t<=ymax;t+=10){el("line",{x1:m.l,x2:m.l+iw,y1:y(t),y2:y(t),stroke:t?"#E8E8E8":"#BDBDBD"},g);var tx=el("text",{x:m.l-8,y:y(t)+4,"text-anchor":"end",fill:"#5A5A5A","font-size":12},g);tx.textContent=fmt(t);}
+  var yl=el("text",{x:m.l-8,y:m.t-14,"text-anchor":"end",fill:"#5A5A5A","font-size":11},g);yl.textContent="T€";
+  V.forEach(function(r,i){var x=m.l+i*bw+bw*.18,w=bw*.64,acc=0;
+    series.forEach(function(se){var v=se.v(r);if(v<=0)return;var y0=y(acc+v),h=y(acc)-y(acc+v);
+      el("rect",{x:x,y:y0,width:w,height:Math.max(h-1,0),fill:se.c},svg);acc+=v;});
+    var lb=el("text",{x:x+w/2,y:H-m.b+18,"text-anchor":"middle",fill:"#5A5A5A","font-size":12},svg);lb.textContent=r.m;
+    var hit=el("rect",{x:m.l+i*bw,y:m.t,width:bw,height:ih,fill:"transparent"},svg);
+    hit.addEventListener("mousemove",function(ev){
+      var html="<b>"+r.m+"</b> · "+r.o+" Öffnungstage<br>"+series.map(function(se){return '<span class="tm-dot" style="background:'+se.c+'"></span>'+se.name+": "+fmt(se.v(r),1)+" T€";}).join("<br>")+"<br><b>Summe: "+fmt(tot[i],1)+" T€</b>";
+      tip.innerHTML=html;tip.style.display="block";var bx=chart.getBoundingClientRect();var px=ev.clientX-bx.left+14;if(px>W-230)px=ev.clientX-bx.left-230;tip.style.left=px+"px";tip.style.top=(ev.clientY-bx.top-10)+"px";});
+    hit.addEventListener("mouseleave",function(){tip.style.display="none";});
+  });
+  // Öffnungstage als Linie auf zweiter Achse
+  var y2=function(v){return m.t+ih-v/31*ih;};
+  var d=V.map(function(r,i){return (i?"L":"M")+(m.l+i*bw+bw/2)+" "+y2(r.o);}).join("");
+  el("path",{d:d,fill:"none",stroke:"#1A1A1A","stroke-width":1.5,"stroke-dasharray":"4 3"},svg);
+  V.forEach(function(r,i){el("circle",{cx:m.l+i*bw+bw/2,cy:y2(r.o),r:2.5,fill:"#1A1A1A"},svg);});
+  [0,10,20,31].forEach(function(t){var tx=el("text",{x:m.l+iw+8,y:y2(t)+4,fill:"#5A5A5A","font-size":12},svg);tx.textContent=t;});
+  var t2=el("text",{x:m.l+iw+8,y:m.t-14,fill:"#5A5A5A","font-size":11},svg);t2.textContent="Tage";
+  document.getElementById("rp-legend").innerHTML=series.map(function(se){return '<span><i style="background:'+se.c+'"></i>'+se.name+'</span>';}).join("")+'<span><i style="background:none;border-top:2px dashed #1A1A1A;height:0;width:14px;border-radius:0;vertical-align:3px"></i>Öffnungstage (rechte Achse)</span>';
+  var sum=V.reduce(function(s,r){return s+r.t.fix+r.t.off+r.t.ums;},0),sf=V.reduce(function(s,r){return s+r.t.fix;},0),so=V.reduce(function(s,r){return s+r.t.off;},0);
+  document.getElementById("rp-chart-note").textContent="Im Beispiel: Vorleistungen im Saisonjahr "+fmt(sum,0)+" T€, davon "+fmt(sf/sum*100,0)+" % fix, "+fmt(so/sum*100,0)+" % öffnungsabhängig, "+fmt((sum-sf-so)/sum*100,0)+" % umsatzabhängig. In Schließmonaten (Oktober, Mai) bleiben nur die fixen Kosten; die BWS des Betriebs ist dort negativ. Alle Werte fiktiv.";
+}
+Array.prototype.forEach.call(document.querySelectorAll(".rp-toggle button"),function(b){b.addEventListener("click",function(){view=b.getAttribute("data-view");Array.prototype.forEach.call(document.querySelectorAll(".rp-toggle button"),function(x){x.setAttribute("aria-pressed",x===b?"true":"false");});drawChart();});});
+
+/* ---------- Lieferkalender ---------- */
+var cal=document.getElementById("rp-cal");
+function drawCal(){
+  var old=cal.querySelector("svg");if(old)old.remove();
+  var W=Math.max(cal.clientWidth,320),H=206,l=16,r=16,iw=W-l-r,mw=iw/12;
+  var svg=el("svg",{width:W,height:H,role:"img","aria-label":"Lieferkalender des Referenzpanels"},cal);
+  var MN=["Jän","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
+  var x=function(mo){return l+mo*mw;}; // mo = 0..12, Monatsanfang
+  // Saisonbänder: Winter Jän–Apr und Okt–Dez, Sommer Mai–Sep
+  el("rect",{x:x(0),y:24,width:x(4)-x(0),height:30,fill:"#E8E8E8"},svg);
+  el("rect",{x:x(4),y:24,width:x(9)-x(4),height:30,fill:"#F4F4F4",stroke:"#DCDCDC"},svg);
+  el("rect",{x:x(9),y:24,width:x(12)-x(9),height:30,fill:"#E8E8E8"},svg);
+  var s1=el("text",{x:(x(4)+x(9))/2,y:44,"text-anchor":"middle","font-size":12,fill:"#5A5A5A"},svg);s1.textContent="Sommersaison";
+  var s2=el("text",{x:(x(0)+x(4))/2,y:44,"text-anchor":"middle","font-size":12,fill:"#5A5A5A"},svg);s2.textContent="Winter (Jän–Apr)";
+  var s3=el("text",{x:(x(9)+x(12))/2,y:44,"text-anchor":"middle","font-size":12,fill:"#5A5A5A"},svg);s3.textContent="Winter (Okt–Dez)";
+  MN.forEach(function(n,i){el("line",{x1:x(i),x2:x(i),y1:60,y2:66,stroke:"#BDBDBD"},svg);var t=el("text",{x:x(i)+mw/2,y:78,"text-anchor":"middle","font-size":12,fill:"#5A5A5A"},svg);t.textContent=n;});
+  el("line",{x1:x(0),x2:x(12),y1:60,y2:60,stroke:"#BDBDBD"},svg);
+  var ev=[
+    {mo:1,c:"#1A1A1A",t:"Lieferung Q4",s:"Okt–Dez · Prüfung",row:0},
+    {mo:4,c:"#1A1A1A",t:"Lieferung Q1",s:"Jän–Mär · Prüfung",row:0},
+    {mo:7,c:"#1A1A1A",t:"Lieferung Q2",s:"Winter vollständig",row:0},
+    {mo:8.5,c:"#D81820",t:"Parameter Winter",s:"ab regulärem Stand Sep",row:1},
+    {mo:10,c:"#1A1A1A",t:"Lieferung Q3",s:"Sommer vollständig",row:0},
+    {mo:11.5,c:"#D81820",t:"Parameter Sommer",s:"ab regulärem Stand Dez",row:1}
+  ];
+  ev.forEach(function(e){var cx=x(e.mo),cy=e.row?164:108;
+    el("line",{x1:cx,x2:cx,y1:60,y2:cy-8,stroke:e.c,"stroke-width":1},svg);
+    if(e.c==="#D81820")el("rect",{x:cx-6,y:cy-6,width:12,height:12,fill:e.c,transform:"rotate(45 "+cx+" "+cy+")"},svg);else el("circle",{cx:cx,cy:cy,r:6,fill:e.c},svg);
+    var anchor=cx>W-110?"end":cx<110?"start":"middle";
+    var t=el("text",{x:cx,y:cy+22,"text-anchor":anchor,"font-size":12,"font-weight":600,fill:"#1A1A1A"},svg);t.textContent=e.t;
+    var t2=el("text",{x:cx,y:cy+36,"text-anchor":anchor,"font-size":11,fill:"#5A5A5A"},svg);t2.textContent=e.s;});
+  svg.setAttribute("height",H+10);
+}
+
+var rt;window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(function(){drawChart();drawCal();},120);});
+drawChart();drawCal();
+})();
+</script>
+</body>
+</html>
