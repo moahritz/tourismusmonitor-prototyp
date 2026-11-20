@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="de-AT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tourismusmonitor Vorarlberg – Modellbeschreibung</title>
+<meta name="description" content="BWS-Modell Tourismusmonitor: vollständige Modellbeschreibung">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="vh-top"></div>
+<header class="vh">
+  <div class="vh-in">
+    <div class="vh-name">Tourismusmonitor <span>Vorarlberg</span></div>
+    <nav class="vh-nav" aria-label="Seiten">
+      <a href="index.html">Dashboard</a><a href="executive-summary.html">Executive Summary</a><a href="modell.html" aria-current="page">Modell</a><a href="kennzahlenproduktion.html">Kennzahlenproduktion</a>
+    </nav>
+    <div class="vh-proto">Prototyp · fiktive Daten</div>
+  </div>
+  <nav class="vh-sub" aria-label="Auf dieser Seite"><div class="vh-sub-in"><a href="#zweck-und-überblick">Zweck und Überblick</a><a href="#notation">Notation</a><a href="#datengrundlagen">Datengrundlagen</a><a href="#aufbereitung-in-der-statistikstelle">Aufbereitung in der
+Statistikstelle</a><a href="#schritt-1-produktionswert">Schritt 1</a><a href="#schritt-2-vorleistungen">Schritt 2</a><a href="#schritt-3-bws-personalaufwand-und-betriebsüberschuss">Schritt 3</a><a href="#schritt-4-kontrollen-und-ampel">Schritt 4</a><a href="#schritt-5-aggregation-und-anbindung">Schritt 5</a><a href="#schritt-6-veröffentlichte-kennzahlen">Schritt 6</a><a href="#ausbaustufen-was-ohne-neue-erhebung-geht">Ausbaustufen</a><a href="#alle-parameter">Alle Parameter</a><a href="#produktionskalender-und-revisionskette">Produktionskalender
+und Revisionskette</a><a href="#qualität-geheimhaltung-grenzen">Qualität, Geheimhaltung,
+Grenzen</a><a href="#offene-punkte">Offene Punkte</a></div></nav>
+</header>
+<main class="page">
+<div class="tm tm-doc">
+  <p class="tm-kicker">Methodik</p>
+  <h1 class="tm-title">BWS-Modell Tourismusmonitor: vollständige Modellbeschreibung</h1>
+<p class="tm-note">Stand: 20. November 2026 · Moritz</p>
+<h2 class="tm-h2" id="zweck-und-überblick">1 · Zweck und Überblick</h2>
+<p>Das Modell schätzt jeden Monat die touristische Bruttowertschöpfung
+(BWS) Vorarlbergs zu Herstellungspreisen, je Branche und je Region, und
+bindet sie jährlich an die amtliche Statistik an. Es braucht keine
+Buchhaltungsdaten einzelner Betriebe: Grundlage sind öffentliche
+Statistiken und Meldungen, die Betriebe ohnehin an Finanzamt und
+Sozialversicherung abgeben.</p>
+<p>Dieses Dokument beschreibt die verbindliche Fassung. Sie verbindet
+die Kennzahlenproduktion (Strukturmodell, Anbindung an RGR und RTSA,
+Flash und regulärer Wert) mit dem Dashboard-Prototyp (Vorsteuer-Signal,
+Ampel, Saisonkennzahlen). Die Begründung der Zusammenführung steht im
+Dokument „Rekalibrierung des BWS-Modells“.</p>
+<p><strong>Grundgleichung.</strong> Die BWS ist Produktionswert minus
+Vorleistungen. Personalkosten sind nie Vorleistungen; sie sind Teil der
+BWS und dienen nur als Kontrolle.</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(1.1)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msub><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>−</mo><msub><mi>V</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\mathit{BWS}_{i,t}=\mathit{PW}_{i,t}-V_{i,t}</annotation></semantics></math></p>
+</div>
+<p><strong>Die Kette in sechs Schritten:</strong></p>
+<ol type="1">
+<li><strong>Produktionswert</strong> aus dem UVA-Umsatz; im Flash,
+solange die UVA fehlt, per Nowcast aus Nächtigungen, Lohnsumme und
+Preisen.</li>
+<li><strong>Vorleistungen</strong> aus zwei Schätzern: dem
+Strukturmodell (Quote der LSE, preisfortgeschrieben, nach
+Kostenverhalten auf Monate verteilt) und dem Vorsteuer-Signal der UVA,
+gewichtet mit κ.</li>
+<li><strong>BWS</strong> als Differenz, dazu Personalaufwand aus der
+mBGM-Lohnsumme und der Betriebsüberschuss.</li>
+<li><strong>Kontrollen</strong> gegen unabhängige Statistik:
+Vorleistungsquote gegen LSE, Personalaufwand gegen RGR-Lohnquote,
+Überschuss je Betrieb. Ergebnis ist eine Ampel.</li>
+<li><strong>Anbindung</strong>: Summen je Branche und Region,
+Jahresanker an der RGR (Denton), touristischer Anteil τ und Rest R am
+RTSA.</li>
+<li><strong>Kennzahlen</strong> für Monat, laufende Saison und gleitende
+12 Monate, bezogen auf Nächtigungen und Beschäftigte.</li>
+</ol>
+<p>Gerechnet wird je Betriebsstätte bei der Statistikstelle;
+veröffentlicht werden nur Summen je Zelle aus Region und Branche mit
+mindestens zehn Betrieben. Jeder Monatswert erscheint zweimal (Flash um
+Tag 25, regulär um Tag 55–60) und wird bis zur endgültigen RGR rund drei
+Jahre später revidiert.</p>
+<h2 class="tm-h2" id="notation">2 · Notation</h2>
+<p>Indizes stehen in Formeln tiefgestellt, im Text in Klammern: v(s) ist
+die Vorleistungsquote der Branche s. Geschätzte Größen tragen ein Dach
+(v̂), Kennzeichnungen einer Quelle stehen hochgestellt (Vᴸˢᴱ).</p>
+<h3 class="tm-h3" id="indizes">2.1 Indizes</h3>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Index</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>i</td>
+<td>Betriebsstätte (Hotel in Lech, Restaurant in Dornbirn, Seilbahn in
+Schruns)</td>
+</tr>
+<tr class="even">
+<td>s</td>
+<td>Branche: ÖNACE-Klasse, zusammengefasst zu 8 Tourismusgruppen; im
+Dashboard 3 Hauptbranchen (Beherbergung, Gastronomie, Bergbahn und
+Skischule) plus „übrige“</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td>RGR-Abschnitt (I Beherbergung und Gastronomie, H Verkehr, R Kunst
+und Erholung, N sonstige Dienstleistungen)</td>
+</tr>
+<tr class="even">
+<td>r</td>
+<td>Region: Gemeinde g, Destination d, Land V</td>
+</tr>
+<tr class="odd">
+<td>t</td>
+<td>Kalendermonat; t − 12 ist derselbe Monat im Vorjahr</td>
+</tr>
+<tr class="even">
+<td>y</td>
+<td>Kalenderjahr, zu dem t gehört</td>
+</tr>
+<tr class="odd">
+<td>y*</td>
+<td>letztes Jahr, für das ein Parameter aus amtlicher Quelle
+vorliegt</td>
+</tr>
+<tr class="even">
+<td>k</td>
+<td>Vorleistungsart: W Waren, E Energie, F Fremdleistungen und
+Instandhaltung, M Miete und Leasing, S Sonstiges</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tm-h3" id="gemessene-größen">2.2 Gemessene Größen</h3>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Größe</th>
+<th>Einheit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>U</td>
+<td>Nettoumsatz laut UVA (Kennzahl 000), nach Steuersätzen</td>
+<td>€</td>
+</tr>
+<tr class="even">
+<td>VSt</td>
+<td>abziehbare Vorsteuer laut UVA (Kennzahl 060 und gesondert geführte
+Vorsteuern)</td>
+<td>€</td>
+</tr>
+<tr class="odd">
+<td>L</td>
+<td>Bruttolohnsumme laut mBGM (Beitragsgrundlagen, gedeckelt)</td>
+<td>€</td>
+</tr>
+<tr class="even">
+<td>E</td>
+<td>Beschäftigte (Köpfe) laut Versicherungsstand</td>
+<td>Personen</td>
+</tr>
+<tr class="odd">
+<td>N</td>
+<td>Nächtigungen</td>
+<td>Anzahl</td>
+</tr>
+<tr class="even">
+<td>O</td>
+<td>Öffnungstage im Monat</td>
+<td>Tage</td>
+</tr>
+<tr class="odd">
+<td>P(k), Pᴾᵂ(s)</td>
+<td>Preisindizes der Vorleistungsarten und der eigenen Leistung</td>
+<td>Index</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tm-h3" id="modellgrößen">2.3 Modellgrößen</h3>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Größe</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PW</td>
+<td>Produktionswert</td>
+</tr>
+<tr class="even">
+<td>Vˢᵗʳ</td>
+<td>Vorleistungen aus dem Strukturmodell</td>
+</tr>
+<tr class="odd">
+<td>Vⱽˢᵗ</td>
+<td>Vorleistungen aus dem Vorsteuer-Signal</td>
+</tr>
+<tr class="even">
+<td>V</td>
+<td>kombinierte Vorleistungen</td>
+</tr>
+<tr class="odd">
+<td>BWS</td>
+<td>Bruttowertschöpfung (Modell, vor Anbindung)</td>
+</tr>
+<tr class="even">
+<td>x</td>
+<td>an die RGR angebundene BWS</td>
+</tr>
+<tr class="odd">
+<td>BWSᵗᵒᵘʳ</td>
+<td>touristische BWS nach Kalibrierung am RTSA</td>
+</tr>
+<tr class="even">
+<td>PA</td>
+<td>Personalaufwand</td>
+</tr>
+<tr class="odd">
+<td>BÜ</td>
+<td>Bruttobetriebsüberschuss bzw. Selbständigeneinkommen</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tm-h3" id="status-jedes-werts">2.4 Status jedes Werts</h3>
+<p>Jeder Wert je Betrieb und Monat trägt einen Status. Im Dashboard wird
+der Status der Zelle gezeigt; modellierte Werte erscheinen nie als
+Messung.</p>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Status</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>UVA-Umsatz und Vorsteuer gemessen, Monatszahler</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>gemessen, aber gekappt oder geglättet (Investitionsspitze,
+Anzahlungen)</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>Umsatz per Nowcast (Flash)</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>Quartalszahler, bis zur Quartals-UVA imputiert</td>
+</tr>
+<tr class="odd">
+<td>E</td>
+<td>kein Vorjahreswert, über Peergruppe geschätzt (neuer Betrieb)</td>
+</tr>
+<tr class="even">
+<td>F</td>
+<td>Spätmelder, Vormonat fortgeschrieben</td>
+</tr>
+<tr class="odd">
+<td>K</td>
+<td>Kleinunternehmer ohne UVA, über Nächtigungen bzw. Beschäftigte
+geschätzt</td>
+</tr>
+</tbody>
+</table></div>
+<h2 class="tm-h2" id="datengrundlagen">3 · Datengrundlagen</h2>
+<p>Das Modell nutzt drei Arten von Daten: monatliche Verwaltungsdaten
+(messen den laufenden Monat), jährliche Strukturstatistik (liefert die
+Parameter) und Jahresanker (legen das Niveau fest). Keine Quelle
+verlangt eine neue Meldung von Betrieben; nur das Referenzpanel ist eine
+freiwillige Erhebung.</p>
+<h3 class="tm-h3" id="monatliche-daten">3.1 Monatliche Daten</h3>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Quelle</th>
+<th>Liefert</th>
+<th>Halter · Ebene</th>
+<th>Verzug</th>
+<th>Aufgabe im Modell</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Gästemeldewesen</td>
+<td>Nächtigungen, Ankünfte, Herkunft</td>
+<td>Gemeinden, Vorarlberg Tourismus · Betrieb</td>
+<td>1–5 Tage</td>
+<td>Nowcast, Öffnungstage, Umsatz der Kleinunternehmer (intern)</td>
+</tr>
+<tr class="even">
+<td>Beherbergungsstatistik</td>
+<td>Nächtigungen</td>
+<td>Statistik Austria · Gemeinde</td>
+<td>≈ 25 Tage</td>
+<td>amtlicher Nenner der Kennzahlen je Nächtigung</td>
+</tr>
+<tr class="odd">
+<td>mBGM</td>
+<td>Bruttolohnsumme, Beschäftigte</td>
+<td>ÖGK, Dachverband · Dienstgeber</td>
+<td>≈ 15 Tage</td>
+<td>Nowcast, Personalaufwand, Öffnungstage</td>
+</tr>
+<tr class="even">
+<td>UVA</td>
+<td>Umsatz nach Steuersätzen, Vorsteuer</td>
+<td>BMF · Unternehmen</td>
+<td>≈ 45 Tage (Monatszahler); Quartalszahler ≈ 2,5 Monate nach
+Quartalsende</td>
+<td>Umsatz, Vorsteuer-Signal</td>
+</tr>
+<tr class="odd">
+<td>VPI-Teilindizes</td>
+<td>Preise Nahrung, Getränke, Dienstleistungen, Beherbergung,
+Gastronomie, Freizeit</td>
+<td>Statistik Austria · Österreich</td>
+<td>≈ 15 Tage</td>
+<td>Preisfortschreibung, Nowcast</td>
+</tr>
+<tr class="even">
+<td>ÖSPI, ÖGPI</td>
+<td>Strom- und Gaspreisindex</td>
+<td>Österreichische Energieagentur · Österreich</td>
+<td>vor Monatsende</td>
+<td>Preisfortschreibung des Energieanteils</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tm-h3" id="jährliche-struktur--und-anker-daten">3.2 Jährliche Struktur- und
+Anker-Daten</h3>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Quelle</th>
+<th>Liefert</th>
+<th>Halter · Ebene</th>
+<th>Verzug</th>
+<th>Aufgabe im Modell</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Leistungs- und Strukturstatistik (LSE)</td>
+<td>Produktionswert, Vorleistungen, Investitionen, Personalaufwand</td>
+<td>Statistik Austria · Abteilung × Bundesland</td>
+<td>≈ 18 Monate</td>
+<td>v, Investitionsanteil, Schätzung von κ, Ampel</td>
+</tr>
+<tr class="even">
+<td>Input-Output-Tabelle</td>
+<td>Vorleistungen nach Gütergruppen</td>
+<td>Statistik Austria · Branche, Österreich</td>
+<td>≈ 3 Jahre</td>
+<td>s̄, ω, φ</td>
+</tr>
+<tr class="odd">
+<td>Bilanzdatenbank</td>
+<td>Erfolgsrechnungen nach Branchen</td>
+<td>KMU Forschung Austria · Branche</td>
+<td>12–18 Monate</td>
+<td>Zuschlag ohne Vorsteuer</td>
+</tr>
+<tr class="even">
+<td>Regionale Gesamtrechnung (RGR)</td>
+<td>BWS, Arbeitnehmerentgelt je Abschnitt</td>
+<td>Statistik Austria · Abschnitt × Bundesland</td>
+<td>Dezember t + 1, revidiert Dezember t + 2</td>
+<td>Jahresanker, α, Lohnquote</td>
+</tr>
+<tr class="odd">
+<td>Regionales Tourismus-Satellitenkonto (RTSA)</td>
+<td>touristische BWS (TDGVA), mit Zusatztabelle je Branche</td>
+<td>WIFO im Auftrag des Landes · Bundesland</td>
+<td>≈ 22 Monate (Oktober t + 2)</td>
+<td>τ, R, Kalibrierrest</td>
+</tr>
+<tr class="even">
+<td>Bundes-TSA</td>
+<td>Tourismusanteile je Gut</td>
+<td>Statistik Austria · Österreich</td>
+<td>≈ 18 Monate</td>
+<td>τ ohne RTSA-Zusatztabelle</td>
+</tr>
+<tr class="odd">
+<td>Tourismusbeitrag § 8</td>
+<td>Umsatzanteil der Quartalszahler</td>
+<td>Gemeinden · Betrieb</td>
+<td>Vorjahr</td>
+<td>Ersatzregel für Quartalszahler ohne Historie</td>
+</tr>
+<tr class="even">
+<td>Unternehmensregister, Beherbergungsregister</td>
+<td>ÖNACE, Gemeinde, Betten, Kategorie</td>
+<td>Statistik Austria, Gemeinden</td>
+<td>laufend</td>
+<td>Zuordnung, Peergruppen</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tm-h3" id="optionale-daten">3.3 Optionale Daten</h3>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Quelle</th>
+<th>Liefert</th>
+<th>Verzug</th>
+<th>Wirkung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Steuerdaten (Stufe 2)</td>
+<td>Produktionswert, Vorleistungen, Personalaufwand je Unternehmen</td>
+<td>12–18 Monate</td>
+<td>betriebsindividuelle Quote, Zuschlag z, Gewicht λ</td>
+</tr>
+<tr class="even">
+<td>Referenzpanel (Stufe 3)</td>
+<td>Kostenarten je Saison aus BMD oder DATEV</td>
+<td>2–3 Monate</td>
+<td>gemessene φ und ω, Test des Vorsteuer-Signals</td>
+</tr>
+<tr class="odd">
+<td>Smart-Meter-Daten</td>
+<td>Energieverbrauch je Betrieb</td>
+<td>Tage</td>
+<td>Energie direkt statt über Quote (Rechtsgrundlage offen)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 class="tm-h2" id="aufbereitung-in-der-statistikstelle">4 · Aufbereitung in der
+Statistikstelle</h2>
+<p>Alle Einzeldaten bleiben bei der Statistikstelle (Statistik Austria
+oder Landesstatistik). Dort werden sie verknüpft, bereinigt und
+lückenlos gemacht, bevor das Modell rechnet. Nach außen gehen nur
+Summen.</p>
+<h3 class="tm-h3" id="verknüpfung-und-zuordnung">4.1 Verknüpfung und Zuordnung</h3>
+<ul>
+<li><strong>ID-Mapping:</strong> Jede Betriebsstätte wird mit
+Steuernummer (UVA) und Dienstgebernummer (mBGM) verknüpft. Das Mapping
+wird im Pilot aufgebaut und laufend gepflegt.</li>
+<li><strong>Mehrbetriebs-Unternehmen:</strong> UVA und mBGM gelten für
+das Unternehmen am Sitz. Umsatz, Vorsteuer und Lohnsumme werden mit
+einem Schlüssel auf die Betriebsstätten verteilt: Betten in der
+Beherbergung, Beschäftigte am Arbeitsort in den übrigen Branchen.</li>
+</ul>
+<div class="tm-eq">
+<p><span class="tm-eqno">(4.1)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msub><mi>X</mi><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⋅</mo><mfrac><msub><mi>w</mi><mi>i</mi></msub><mrow><munder><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><mi>u</mi></mrow></munder><msub><mi>w</mi><mi>j</mi></msub></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>X</mi><mo>∈</mo><mo form="prefix" stretchy="false">{</mo><mi>U</mi><mo>,</mo><mspace width="0.222em"></mspace><mrow><mi>𝑉</mi><mi>𝑆</mi><mi>𝑡</mi></mrow><mo>,</mo><mspace width="0.222em"></mspace><mi>L</mi><mo form="postfix" stretchy="false">}</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>w</mi><mo>=</mo><mtext mathvariant="normal">Betten bzw. Beschäftigte</mtext></mrow><annotation encoding="application/x-tex">X_{i,t}=X_{u,t}\cdot\frac{w_i}{\sum_{j\in u}w_j},\qquad X\in\{U,\ \mathit{VSt},\ L\},\qquad w=\text{Betten bzw.\ Besch\"aftigte}</annotation></semantics></math></p>
+</div>
+<ul>
+<li><strong>Branche:</strong> Ein Unternehmen zählt ganz zu der Branche
+seiner Haupttätigkeit. Seit Jänner 2025 gilt ÖNACE 2025; Zeitreihen
+werden an der Umstellung verkettet.</li>
+</ul>
+<h3 class="tm-h3" id="lücken-im-umsatz">4.2 Lücken im Umsatz</h3>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Fall</th>
+<th>Status</th>
+<th>Regel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Monatszahler, UVA noch nicht da (Flash)</td>
+<td>C</td>
+<td>Nowcast aus Nächtigungen, Lohnsumme und Preisen (Abschnitt 5.2)</td>
+</tr>
+<tr class="even">
+<td>Quartalszahler mit eigener Historie</td>
+<td>D</td>
+<td>wie Nowcast, ersetzt durch die Quartals-UVA; Quartalssumme wird nach
+dem Nowcast-Profil auf die Monate verteilt</td>
+</tr>
+<tr class="odd">
+<td>Quartalszahler ohne Historie</td>
+<td>D</td>
+<td>Hochrechnung der Zelle mit dem Umsatzanteil der Quartalszahler aus
+dem Tourismusbeitrag (Formel 4.2)</td>
+</tr>
+<tr class="even">
+<td>neuer Betrieb ohne Vorjahr</td>
+<td>E</td>
+<td>Nächtigungen bzw. Beschäftigte mal Umsatz je Einheit der Peergruppe
+(Branche, Größe, Kategorie, Region)</td>
+</tr>
+<tr class="odd">
+<td>Spätmelder</td>
+<td>F</td>
+<td>Vorjahresmonat mal Veränderungsrate der Zelle</td>
+</tr>
+<tr class="even">
+<td>Kleinunternehmer ohne UVA</td>
+<td>K</td>
+<td>Nächtigungen mal Umsatz je Nächtigung der Peergruppe (Formel 4.3);
+Vorleistungen nur aus dem Strukturmodell</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tm-eq">
+<p><span class="tm-eqno">(4.2)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>U</mi><mo accent="true">̂</mo></mover><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><mfrac><msubsup><mi>U</mi><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>t</mi></mrow><mrow><mi mathvariant="normal">g</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">m</mi></mrow></msubsup><mrow><mn>1</mn><mo>−</mo><msub><mi>q</mi><mrow><mi>s</mi><mo>,</mo><mi>r</mi></mrow></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\hat U_{s,r,t}=\frac{U^{\mathrm{gem}}_{s,r,t}}{1-q_{s,r}}</annotation></semantics></math></p>
+</div>
+<div class="tm-eq">
+<p><span class="tm-eqno">(4.3)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>U</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msub><mi>N</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⋅</mo><mo form="prefix" maxsize="1.8" minsize="1.8" stretchy="false">(</mo><mfrac><mi>U</mi><mi>N</mi></mfrac><msub><mo form="postfix" maxsize="1.8" minsize="1.8" stretchy="false">)</mo><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="0.167em"></mspace><mi>t</mi><mo>−</mo><mn>12</mn></mrow></msub><mo>⋅</mo><mfrac><msubsup><mi>P</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi></mrow><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">W</mi></mrow></msubsup><msubsup><mi>P</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>12</mn></mrow><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">W</mi></mrow></msubsup></mfrac><mspace width="2.0em"></mspace><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mtext mathvariant="normal">Peergruppe</mtext></mrow><annotation encoding="application/x-tex">\hat U_{i,t}=N_{i,t}\cdot\Big(\frac{U}{N}\Big)_{p(i),\,t-12}\cdot\frac{P^{\mathrm{PW}}_{s,t}}{P^{\mathrm{PW}}_{s,t-12}}\qquad p(i)=\text{Peergruppe}</annotation></semantics></math></p>
+</div>
+<h3 class="tm-h3" id="bereinigung-der-vorsteuer">4.3 Bereinigung der Vorsteuer</h3>
+<p>Die Vorsteuer enthält Investitionen und folgt dem Rechnungsdatum.
+Bevor sie als Kostensignal dient, wird sie in drei Schritten
+bereinigt:</p>
+<ol type="1">
+<li><strong>Umrechnung in Einkäufe:</strong> Vorsteuer geteilt durch den
+effektiven Vorsteuersatz s̄ der Branche.</li>
+<li><strong>Kappung:</strong> Ein Monatswert über dem Dreifachen des
+Medians der letzten zwölf Monate wird auf diesen Wert begrenzt; der
+Überschuss wird als Investition markiert (Status B).</li>
+<li><strong>Glättung:</strong> gleitender Dreimonatsdurchschnitt, weil
+Rechnungen und Lagerkäufe vor der Saison zeitlich streuen.</li>
+</ol>
+<div class="tm-eq">
+<p><span class="tm-eqno">(4.4)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><msub><mi>E</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mrow><mi>𝑉</mi><mi>𝑆</mi><mi>𝑡</mi></mrow><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mspace width="0.167em"></mspace><mi>/</mi><mspace width="0.167em"></mspace><msub><mover><mi>s</mi><mo accent="true">‾</mo></mover><mi>s</mi></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msubsup><mi>E</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow><mi>c</mi></msubsup></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>min</mo><mspace width="-0.167em"></mspace><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><msub><mi>E</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>,</mo><mspace width="0.222em"></mspace><mn>3</mn><mo>⋅</mo><mo>Median</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>E</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>12</mn></mrow></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>E</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><mover><mi>E</mi><mo accent="true">̃</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>3</mn></mfrac><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><msubsup><mi>E</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow><mi>c</mi></msubsup><mo>+</mo><msubsup><mi>E</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>1</mn></mrow><mi>c</mi></msubsup><mo>+</mo><msubsup><mi>E</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>2</mn></mrow><mi>c</mi></msubsup><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}E_{i,t}&amp;=\mathit{VSt}_{i,t}\,/\,\bar s_s\\ E^{c}_{i,t}&amp;=\min\!\big(E_{i,t},\ 3\cdot\operatorname{Median}(E_{i,t-12},\dots,E_{i,t-1})\big)\\ \tilde E_{i,t}&amp;=\tfrac13\big(E^{c}_{i,t}+E^{c}_{i,t-1}+E^{c}_{i,t-2}\big)\end{aligned}</annotation></semantics></math></p>
+</div>
+<h3 class="tm-h3" id="zeitpunkt-der-umsätze">4.4 Zeitpunkt der Umsätze</h3>
+<p>UVA-Umsätze folgen der Steuerschuld, nicht der Leistung: Anzahlungen
+für Aufenthalte und Umsätze von Ist-Versteuerern erscheinen im
+Zahlungsmonat. Betriebe, deren Umsatzprofil deutlich vom
+Nächtigungsprofil abweicht, werden markiert und mit einem gleitenden
+Dreimonatswert geführt (Status B).</p>
+<h2 class="tm-h2" id="schritt-1-produktionswert">5 · Schritt 1: Produktionswert</h2>
+<h3 class="tm-h3" id="vom-umsatz-zum-produktionswert">5.1 Vom Umsatz zum
+Produktionswert</h3>
+<p>Der Produktionswert ist der Nettoumsatz des Monats plus ein
+betrieblicher Zuschlag z für alles, was im Produktionswert, aber nicht
+im Umsatz steckt (aktivierte Eigenleistungen, Bestandsveränderungen),
+abzüglich Umsätzen, die keine Produktion sind (Verkauf von
+Anlagegütern).</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(5.1)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msub><mi>U</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⋅</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msub><mi>z</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathit{PW}_{i,t}=U_{i,t}\cdot(1+z_i)</annotation></semantics></math></p>
+</div>
+<ul>
+<li><strong>U:</strong> Nettoumsatz laut UVA (Kennzahl 000). Die
+Aufteilung nach Steuersätzen wird mitgeführt; sie trennt grob
+Beherbergung und Speisen (10 %) von Getränken und sonstigen Leistungen
+(20 %) und geht ins Quotenmodell ein.</li>
+<li><strong>z:</strong> In Stufe 1 gilt z = 0. Mit Steuerdaten (Stufe 2)
+wird z je Betrieb aus dem Referenzjahr bestimmt: z = PWʳᵉᶠ ÷ Uʳᵉᶠ − 1.
+In touristischen Dienstleistungen liegt z meist bei wenigen
+Prozent.</li>
+</ul>
+<h3 class="tm-h3" id="umsatz-nowcast-im-flash">5.2 Umsatz-Nowcast im Flash</h3>
+<p>Um Tag 25 fehlt die UVA noch. Die Veränderung des Umsatzes gegenüber
+dem Vorjahresmonat wird dann aus Indikatoren geschätzt, die schon
+vorliegen:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(5.2)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mo>ln</mo><mfrac><msub><mover><mi>U</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><msub><mi>U</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>12</mn></mrow></msub></mfrac><mo>=</mo><mrow></mrow></mtd><mtd columnalign="left" style="text-align: left"><msub><mi>β</mi><mrow><mn>0</mn><mo>,</mo><mi>s</mi></mrow></msub><mo>+</mo><msub><mi>β</mi><mrow><mn>1</mn><mo>,</mo><mi>s</mi></mrow></msub><mo>ln</mo><mfrac><msub><mi>N</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><msub><mi>N</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>12</mn></mrow></msub></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mo>+</mo><msub><mi>β</mi><mrow><mn>2</mn><mo>,</mo><mi>s</mi></mrow></msub><mo>ln</mo><mfrac><msub><mi>L</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><msub><mi>L</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>12</mn></mrow></msub></mfrac><mo>+</mo><msub><mi>β</mi><mrow><mn>3</mn><mo>,</mo><mi>s</mi></mrow></msub><mo>ln</mo><mfrac><msubsup><mi>P</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi></mrow><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">W</mi></mrow></msubsup><msubsup><mi>P</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>12</mn></mrow><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">W</mi></mrow></msubsup></mfrac></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}\ln\frac{\hat U_{i,t}}{U_{i,t-12}}={}&amp;\beta_{0,s}+\beta_{1,s}\ln\frac{N_{i,t}}{N_{i,t-12}}\\&amp;+\beta_{2,s}\ln\frac{L_{i,t}}{L_{i,t-12}}+\beta_{3,s}\ln\frac{P^{\mathrm{PW}}_{s,t}}{P^{\mathrm{PW}}_{s,t-12}}\end{aligned}</annotation></semantics></math></p>
+</div>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Koeffizient</th>
+<th>Bedeutung</th>
+<th>tragend für</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>β₀(s)</td>
+<td>Trend der Branche im Monat, Kalender- und Feiertagseffekte
+(Ostern)</td>
+<td>alle</td>
+</tr>
+<tr class="even">
+<td>β₁(s)</td>
+<td>Elastizität auf Nächtigungen; für Gastronomie, Seilbahnen und
+Freizeit die Nächtigungen der Gemeinde</td>
+<td>Beherbergung</td>
+</tr>
+<tr class="odd">
+<td>β₂(s)</td>
+<td>Elastizität auf die Lohnsumme</td>
+<td>Branchen ohne eigene Nächtigungen</td>
+</tr>
+<tr class="even">
+<td>β₃(s)</td>
+<td>Preisanteil laut VPI-Teilindex; im Flash der letzte verfügbare
+Monat</td>
+<td>alle</td>
+</tr>
+</tbody>
+</table></div>
+<p>Die Koeffizienten werden je Branche auf allen Vorjahresmonaten mit
+gemessenem Umsatz geschätzt und jedes Jahr im Jänner erneuert. Die
+Standardabweichung der Residuen bestimmt das Fehlerband des Flash. Ohne
+Vorjahreswert gilt die Peergruppen-Regel aus Abschnitt 4.2.</p>
+<p>Im regulären Stand (um Tag 55–60) ersetzt der gemessene UVA-Umsatz
+den Nowcast für alle Monatszahler.</p>
+<h2 class="tm-h2" id="schritt-2-vorleistungen">6 · Schritt 2: Vorleistungen</h2>
+<p>Die Vorleistungen sind der unsicherste Teil der Rechnung, weil es
+keine monatliche Meldung der Einkäufe gibt. Das Modell nutzt deshalb
+zwei unabhängige Schätzer und gewichtet sie: das Strukturmodell (stabil,
+aber mit Jahresparametern) und das Vorsteuer-Signal (aktuell, aber
+verrauscht).</p>
+<h3 class="tm-h3" id="strukturmodell">6.1 Strukturmodell</h3>
+<p><strong>a) Ausgangsquote.</strong> Die Vorleistungsquote v ist der
+Anteil der Vorleistungen am Produktionswert eines Jahres. Der
+Ausgangswert mischt die eigene Historie des Betriebs mit einem
+Modellwert:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(6.1)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mover><mi>v</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow><mn>0</mn></msubsup><mo>=</mo><msub><mi>λ</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><msub><mi>v</mi><mrow><mi>i</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow></msub><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>λ</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mspace width="0.167em"></mspace><msubsup><mover><mi>v</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow><mi>M</mi></msubsup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>λ</mi><mi>i</mi></msub><mo>=</mo><mfrac><msub><mi>n</mi><mi>i</mi></msub><mrow><msub><mi>n</mi><mi>i</mi></msub><mo>+</mo><msub><mi>n</mi><mn>0</mn></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\hat v^{0}_{i,y}=\lambda_i\,v_{i,y^*}+(1-\lambda_i)\,\hat v^{M}_{i,y},\qquad\lambda_i=\frac{n_i}{n_i+n_0}</annotation></semantics></math></p>
+</div>
+<ul>
+<li><strong>v(i, y*)</strong>: Vorleistungsquote des Betriebs im letzten
+Referenzjahr laut Steuerdaten (nur Stufe 2).</li>
+<li><strong>v̂ᴹ(i, y)</strong>: Modellwert aus dem hierarchischen
+Quotenmodell (logistisch, je Branche, mit Personalintensität, Größe,
+Betten, Umsatzanteil nach Steuersätzen, Region). Ohne Steuerdaten ist er
+die Quote der Abteilung in Vorarlberg laut LSE, verfeinert mit den
+Größenklassen der LSE für Österreich.</li>
+<li><strong>λ(i)</strong>: Gewicht der eigenen Historie; n(i) ist die
+Zahl der Referenzjahre (höchstens drei), n₀ eine Glättungskonstante aus
+dem Backtesting (Startwert 2). Ohne Steuerdaten gilt λ = 0. Nach
+Übernahme, Umbau oder Konzeptwechsel wird n(i) auf 0 gesetzt.</li>
+</ul>
+<p><strong>Das hierarchische Quotenmodell.</strong> Es schätzt für jeden
+Betrieb eine Vorleistungsquote aus Merkmalen, die monatlich ohnehin
+vorliegen, auch wenn der Betrieb selbst keine Steuerdaten-Historie hat.
+„Hierarchisch“ heißt: Die Koeffizienten jeder Branche werden zum
+Durchschnitt ihrer Tourismusgruppe hin gezogen. Eine kleine Branche mit
+wenigen Betrieben in Vorarlberg übernimmt so viel vom Gruppenwert, eine
+große Branche folgt fast nur den eigenen Daten.</p>
+<p>Die Quote liegt immer zwischen 0 und 1; deshalb wird ihr Logit
+modelliert, nicht die Quote selbst:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(6.1a)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mo>logit</mo><msubsup><mover><mi>v</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow><mi>M</mi></msubsup></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mi>a</mi><mi>s</mi></msub><mo>+</mo><msub><mi>δ</mi><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow></msub><mo>+</mo><msubsup><mi>𝐛</mi><mi>s</mi><mi>⊤</mi></msubsup><msub><mi>𝐱</mi><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow></msub><mo>+</mo><msub><mi>u</mi><mrow><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><mi>𝐱</mi><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo form="prefix" maxsize="1.8" minsize="1.8" stretchy="false">(</mo><mfrac displaystyle="false"><msub><mi>L</mi><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow></msub><msub><mi>U</mi><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow></msub></mfrac><mo>,</mo><mspace width="0.222em"></mspace><mo>ln</mo><msub><mi>E</mi><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow></msub><mo>,</mo><mspace width="0.222em"></mspace><mo>ln</mo><msub><mrow><mi>𝐵</mi><mi>𝑒</mi><mi>𝑡</mi><mi>𝑡</mi><mi>𝑒</mi><mi>𝑛</mi></mrow><mi>i</mi></msub><mo>,</mo><mspace width="0.222em"></mspace><mfrac displaystyle="false"><msubsup><mi>U</mi><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow><mrow><mn>20</mn><mi>%</mi></mrow></msubsup><msub><mi>U</mi><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow></msub></mfrac><mo form="postfix" maxsize="1.8" minsize="1.8" stretchy="false">)</mo></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}\operatorname{logit}\hat v^{M}_{i,y}&amp;=a_{s}+\delta_{s,y}+\mathbf b_{s}^{\top}\mathbf x_{i,y}+u_{r(i)}\\ \mathbf x_{i,y}&amp;=\Big(\tfrac{L_{i,y}}{U_{i,y}},\ \ln E_{i,y},\ \ln\mathit{Betten}_{i},\ \tfrac{U^{20\%}_{i,y}}{U_{i,y}}\Big)\end{aligned}</annotation></semantics></math></p>
+</div>
+<ul>
+<li><strong>a(s):</strong> Grundniveau der Branche; <strong>δ(s,
+y):</strong> Jahreskorrektur, die das Modell an die LSE anbindet
+(unten).</li>
+<li><strong>x(i, y):</strong> Personalintensität (Lohnsumme ÷ Umsatz),
+Größe (Beschäftigte, logarithmiert), Betten (nur Beherbergung, sonst 0)
+und Umsatzanteil zum 20-%-Satz (Getränke, sonstige Leistungen). Viel
+eigenes Personal heißt wenig Fremdleistung; ein hoher Getränkeanteil
+heißt hohen Wareneinsatz.</li>
+<li><strong>u(r):</strong> Regionseffekt der Destination, für
+Kostenunterschiede, die die Merkmale nicht erklären.</li>
+</ul>
+<p>Die drei Ebenen der Hierarchie (Betrieb in Branche, Branche in
+Tourismusgruppe T(s), Destination) sind als Verteilungen
+geschrieben:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(6.1b)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>s</mi></msub><mo>∼</mo><mi>𝒩</mi><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><msub><mi>a</mi><mrow><mi>T</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></msub><mo>,</mo><msubsup><mi>σ</mi><mi>a</mi><mn>2</mn></msubsup><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>𝐛</mi><mi>s</mi></msub><mo>∼</mo><mi>𝒩</mi><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><msub><mi>𝐛</mi><mrow><mi>T</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></msub><mo>,</mo><msub><mi>Σ</mi><mi>b</mi></msub><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>u</mi><mi>r</mi></msub><mo>∼</mo><mi>𝒩</mi><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><mn>0</mn><mo>,</mo><msubsup><mi>σ</mi><mi>r</mi><mn>2</mn></msubsup><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">a_{s}\sim\mathcal N\big(a_{T(s)},\sigma_a^2\big),\qquad\mathbf b_{s}\sim\mathcal N\big(\mathbf b_{T(s)},\Sigma_b\big),\qquad u_{r}\sim\mathcal N\big(0,\sigma_r^2\big)</annotation></semantics></math></p>
+</div>
+<p>σ(a), Σ(b) und σ(r) bestimmen, wie stark gezogen wird; sie werden
+mitgeschätzt, nicht gesetzt. Geschätzt wird als gewichtete fraktionale
+Logit-Regression (Gewicht: Produktionswert) auf allen Betrieben und
+Referenzjahren mit Steuerdaten, jedes Jahr neu, sobald ein neuer
+Steuerjahrgang vorliegt.</p>
+<p><strong>Anbindung an die LSE.</strong> Die Schätzung erklärt
+Unterschiede zwischen Betrieben; das Niveau setzt die LSE.
+<strong>δ</strong>(s, y) wird je Branche so gewählt, dass die
+produktionswertgewichtete Modellquote die Quote der Abteilung in
+Vorarlberg laut LSE trifft:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(6.1c)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>s</mi></mrow></munder><msub><mover><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow></msub><mspace width="0.167em"></mspace><msubsup><mover><mi>v</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow><mi>M</mi></msubsup></mrow><mrow><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>s</mi></mrow></munder><msub><mover><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow></msub></mrow></mfrac><mo>=</mo><msubsup><mi>v</mi><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow><mrow><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi></mrow></msubsup><mspace width="2.0em"></mspace><mo>⇒</mo><mspace width="0.222em"></mspace><msub><mi>δ</mi><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\frac{\sum_{i\in s}\widehat{\mathit{PW}}_{i,y^*}\,\hat v^{M}_{i,y^*}}{\sum_{i\in s}\widehat{\mathit{PW}}_{i,y^*}}=v^{\mathrm{LSE}}_{s,V,y^*}\qquad\Rightarrow\ \delta_{s,y}</annotation></semantics></math></p>
+</div>
+<p><strong>Ohne Steuerdaten (Stufe 0 und 1).</strong> Ohne betriebliche
+Quoten lässt sich das Modell nicht schätzen. Es fällt dann auf zwei
+Ebenen zurück: die Quote der Abteilung in Vorarlberg, verschoben mit dem
+Größenklassen-Profil der LSE für Österreich:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(6.1d)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mover><mi>v</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow><mi>M</mi></msubsup><mo>=</mo><msubsup><mi>v</mi><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow><mrow><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi></mrow></msubsup><mo>⋅</mo><mfrac><msubsup><mi>v</mi><mrow><mi>s</mi><mo>,</mo><mrow><mi mathvariant="normal">A</mi><mi mathvariant="normal">T</mi></mrow><mo>,</mo><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow><mrow><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi></mrow></msubsup><msubsup><mi>v</mi><mrow><mi>s</mi><mo>,</mo><mrow><mi mathvariant="normal">A</mi><mi mathvariant="normal">T</mi></mrow><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow><mrow><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi></mrow></msubsup></mfrac><mspace width="2.0em"></mspace><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mtext mathvariant="normal">Größenklasse</mtext></mrow><annotation encoding="application/x-tex">\hat v^{M}_{i,y}=v^{\mathrm{LSE}}_{s,V,y^*}\cdot\frac{v^{\mathrm{LSE}}_{s,\mathrm{AT},h(i),y^*}}{v^{\mathrm{LSE}}_{s,\mathrm{AT},y^*}}\qquad h(i)=\text{Gr\"o\ss enklasse}</annotation></semantics></math></p>
+</div>
+<p>In dieser Form unterscheiden sich Betriebe nur nach Branche und
+Größenklasse. Personalintensität, Betten und Steuersatzmix wirken erst
+ab Stufe 2. Die Auswahl der Merkmale ist ein Startvorschlag und wird im
+Backtesting geprüft (Abschnitt 15).</p>
+<p><strong>b) Preisfortschreibung.</strong> Steigen Einkaufspreise
+anders als die eigenen Preise, verschiebt sich die Quote auch ohne
+Veränderung im Betrieb. Das ist für Energie entscheidend (der ÖGPI lag
+im Oktober 2026 um 125 % über dem Vorjahr).</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(6.2)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow></msub><mo>=</mo><msubsup><mover><mi>v</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow><mn>0</mn></msubsup><mo>⋅</mo><mfrac><mrow><munder><mo>∑</mo><mi>k</mi></munder><msub><mi>ω</mi><mrow><mi>i</mi><mo>,</mo><mi>k</mi></mrow></msub><mspace width="0.167em"></mspace><msub><mi>P</mi><mrow><mi>k</mi><mo>,</mo><mi>y</mi></mrow></msub><mi>/</mi><msub><mi>P</mi><mrow><mi>k</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow></msub></mrow><mrow><msubsup><mi>P</mi><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">W</mi></mrow></msubsup><mi>/</mi><msubsup><mi>P</mi><mrow><mi>s</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">W</mi></mrow></msubsup></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>k</mi><mo>∈</mo><mo form="prefix" stretchy="false">{</mo><mi>W</mi><mo>,</mo><mi>E</mi><mo>,</mo><mi>F</mi><mo>,</mo><mi>M</mi><mo>,</mo><mi>S</mi><mo form="postfix" stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\hat v_{i,y}=\hat v^{0}_{i,y}\cdot\frac{\sum_k\omega_{i,k}\,P_{k,y}/P_{k,y^*}}{P^{\mathrm{PW}}_{s,y}/P^{\mathrm{PW}}_{s,y^*}},\qquad k\in\{W,E,F,M,S\}</annotation></semantics></math></p>
+</div>
+<p><strong>ω</strong>(i, k) ist der Anteil der Vorleistungsart k an den
+Vorleistungen im Referenzjahr (Summe 1, aus der IO-Tabelle). Die
+Preisindizes sind Jahresdurchschnitte der bis t vorliegenden Monate:
+<strong>W</strong> VPI Nahrungsmittel und Getränke; <strong>E</strong>
+ÖSPI und ÖGPI, gewichtet mit Strom- und Gasanteil; <strong>F</strong>
+VPI Dienstleistungen bzw. Tariflohnindex; <strong>M</strong> VPI
+(Indexmieten); <strong>S</strong> VPI gesamt. Annahme: Die mengenmäßige
+Vorleistungsintensität bleibt gleich.</p>
+<p><strong>c) Plausibilität. v̂</strong> wird auf das 5. bis 95.
+Perzentil der Referenzquoten der Branche begrenzt. Werte außerhalb
+werden geprüft, nicht still gekappt.</p>
+<p><strong>d) Verteilung auf Monate.</strong> Die Jahresvorleistungen
+werden nach dem Verhalten der Kosten in drei Teile zerlegt:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(6.3)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><msubsup><mi>V</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi></mrow></msubsup></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow></msub><mspace width="0.167em"></mspace><msub><mover><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>φ</mi><mi>s</mi><mi>F</mi></msubsup><mspace width="0.167em"></mspace><mfrac><mn>1</mn><mn>12</mn></mfrac><mo>+</mo><msubsup><mi>φ</mi><mi>s</mi><mi>O</mi></msubsup><mspace width="0.167em"></mspace><mfrac><msub><mi>O</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><msub><mover><mi>O</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow></msub></mfrac><mo>+</mo><msubsup><mi>φ</mi><mi>s</mi><mi>U</mi></msubsup><mspace width="0.167em"></mspace><mfrac><msub><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><msub><mover><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>y</mi></mrow></msub></mfrac><mo form="postfix" stretchy="true">]</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msubsup><mi>φ</mi><mi>s</mi><mi>F</mi></msubsup><mo>+</mo><msubsup><mi>φ</mi><mi>s</mi><mi>O</mi></msubsup><mo>+</mo><msubsup><mi>φ</mi><mi>s</mi><mi>U</mi></msubsup></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mn>1</mn></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}V^{\mathrm{Str}}_{i,t}&amp;=\hat v_{i,y}\,\widehat{\mathit{PW}}_{i,y}\left[\varphi^{F}_{s}\,\frac{1}{12}+\varphi^{O}_{s}\,\frac{O_{i,t}}{\hat O_{i,y}}+\varphi^{U}_{s}\,\frac{\mathit{PW}_{i,t}}{\widehat{\mathit{PW}}_{i,y}}\right]\\ \varphi^{F}_{s}+\varphi^{O}_{s}+\varphi^{U}_{s}&amp;=1\end{aligned}</annotation></semantics></math></p>
+</div>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Anteil</th>
+<th>Definition</th>
+<th>Typische Kostenarten</th>
+<th>Verteilt nach</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>φᶠ fix</td>
+<td>fällt jeden Kalendermonat gleich an, auch wenn der Betrieb
+geschlossen ist</td>
+<td>Miete, Pacht, Leasing, Versicherungen, Grund- und Netzgebühren,
+Software, Beratung, Wartungsverträge</td>
+<td>1/12 je Monat</td>
+</tr>
+<tr class="even">
+<td>φᴼ öffnungsabhängig</td>
+<td>fällt nur an Betriebstagen an, kaum abhängig von der Auslastung</td>
+<td>Energie für Heizung, Lifte, Beschneiung, Kühlung; Grundreinigung;
+laufende Instandhaltung</td>
+<td>Öffnungstage O</td>
+</tr>
+<tr class="odd">
+<td>φᵁ umsatzabhängig</td>
+<td>steigt mit jedem verkauften Zimmer, Essen oder Ticket</td>
+<td>Lebensmittel, Getränke, Handelsware, Buchungsprovisionen,
+Kartengebühren, Wäsche je Belegung</td>
+<td>Produktionswert</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Bestimmung:</strong> Jede Gütergruppe der IO-Tabelle (bzw.
+Kostenart im Referenzpanel) wird genau einem Typ zugeordnet; der Anteil
+ist die Summe der zugeordneten Vorleistungen geteilt durch alle
+Vorleistungen. Gemischte Arten (Energie: Grundpreis fix, Arbeitspreis
+öffnungsabhängig) werden mit einem dokumentierten Schlüssel
+geteilt.</li>
+<li><strong>Öffnungstage:</strong> Tage mit mindestens einer Nächtigung
+(Beherbergung) bzw. mit Beschäftigten laut Versicherungsstand (übrige
+Branchen). Für Seilbahnen zählen Beschneiungstage vor Saisonstart mit
+(Saisonkalender).</li>
+<li><strong>Jahreswerte im laufenden Jahr:</strong> PŴ und Ô für das
+ganze Jahr sind noch unbekannt. Sie werden als Summe der beobachteten
+Monate plus der Vorjahresmonate, fortgeschrieben mit der bisherigen
+Jahresentwicklung der Branche, geschätzt.</li>
+<li><strong>Folge:</strong> In Schließmonaten bleiben nur fixe
+Vorleistungen; die BWS wird negativ. Das ist gewollt und wird
+gezeigt.</li>
+</ul>
+<h3 class="tm-h3" id="vorsteuer-signal">6.2 Vorsteuer-Signal</h3>
+<p>Die UVA enthält die Vorsteuer auf die Einkäufe des Monats. Nach der
+Bereinigung (Abschnitt 4.3) wird sie in Vorleistungen umgerechnet:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(6.4)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>V</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow><mrow><mi mathvariant="normal">V</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">t</mi></mrow></msubsup><mo>=</mo><msub><mi>c</mi><mi>s</mi></msub><mspace width="0.167em"></mspace><msub><mover><mi>E</mi><mo accent="true">̃</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>c</mi><mi>s</mi></msub><mo>=</mo><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mrow><mi>𝑖</mi><mi>𝑛</mi><mi>𝑣</mi></mrow><mi>s</mi></msub><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><mn>1</mn><mo>+</mo><msub><mrow><mi>𝑧</mi><mi>𝑢</mi><mi>𝑠</mi></mrow><mi>s</mi></msub><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">V^{\mathrm{VSt}}_{i,t}=c_s\,\tilde E_{i,t},\qquad c_s=\big(1-\mathit{inv}_s\big)\big(1+\mathit{zus}_s\big)</annotation></semantics></math></p>
+</div>
+<ul>
+<li><strong>inv(s):</strong> Anteil der vorsteuerbelasteten Einkäufe,
+der Investition ist, aus der LSE (Bruttoinvestitionen ÷ (Investitionen +
+vorsteuerbelastete Vorleistungen)).</li>
+<li><strong>zus(s):</strong> Zuschlag für Vorleistungen ohne Vorsteuer
+(Versicherungen, Bankgebühren, Mieten ohne Umsatzsteuer, Bezüge von
+Kleinunternehmern), aus Bilanzdatenbank und IO-Tabelle.</li>
+<li><strong>Mit Steuerdaten</strong> wird c je Betrieb direkt bestimmt:
+c(i) = Vʳᵉᶠ ÷ bereinigte Einkäufe im Referenzjahr.</li>
+<li><strong>Voraussetzung:</strong> Die Statistikstelle erhält die
+Vorsteuer-Felder der UVA, nicht nur die Umsätze.</li>
+</ul>
+<h3 class="tm-h3" id="gewichtung-der-beiden-schätzer">6.3 Gewichtung der beiden
+Schätzer</h3>
+<div class="tm-eq">
+<p><span class="tm-eqno">(6.5)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msub><mi>κ</mi><mi>s</mi></msub><mspace width="0.167em"></mspace><msubsup><mi>V</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow><mrow><mi mathvariant="normal">V</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">t</mi></mrow></msubsup><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>κ</mi><mi>s</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mspace width="0.167em"></mspace><msubsup><mi>V</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi></mrow></msubsup></mrow><annotation encoding="application/x-tex">V_{i,t}=\kappa_s\,V^{\mathrm{VSt}}_{i,t}+(1-\kappa_s)\,V^{\mathrm{Str}}_{i,t}</annotation></semantics></math></p>
+</div>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Situation</th>
+<th>κ</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Flash (keine UVA)</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>Kleinunternehmer (keine Vorsteuer)</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>regulärer Stand, solange weniger als zwei LSE-Jahre mit UVA
+vorliegen</td>
+<td>0,5</td>
+</tr>
+<tr class="even">
+<td>regulärer Stand danach</td>
+<td>geschätzt je Branche (Formel 6.6), begrenzt auf 0 bis 1</td>
+</tr>
+</tbody>
+</table></div>
+<p>κ wird mit jedem LSE-Jahrgang neu geschätzt: Gesucht ist das Gewicht,
+bei dem die Jahressummen der kombinierten Vorleistungen am nächsten an
+den Vorleistungen der LSE liegen.</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(6.6)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>κ</mi><mo accent="true">̂</mo></mover><mi>s</mi></msub><mo>=</mo><mfrac><mrow><munder><mo>∑</mo><mi>y</mi></munder><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><msubsup><mi>V</mi><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow><mrow><mi mathvariant="normal">V</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">t</mi></mrow></msubsup><mo>−</mo><msubsup><mi>V</mi><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi></mrow></msubsup><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><msubsup><mi>V</mi><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow><mrow><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi></mrow></msubsup><mo>−</mo><msubsup><mi>V</mi><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi></mrow></msubsup><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo></mrow><mrow><munder><mo>∑</mo><mi>y</mi></munder><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><msubsup><mi>V</mi><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow><mrow><mi mathvariant="normal">V</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">t</mi></mrow></msubsup><mo>−</mo><msubsup><mi>V</mi><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi></mrow></msubsup><msup><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo><mn>2</mn></msup></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mrow><mtext mathvariant="normal">begrenzt auf </mtext><mspace width="0.333em"></mspace></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\hat\kappa_s=\frac{\sum_y\big(V^{\mathrm{VSt}}_{s,y}-V^{\mathrm{Str}}_{s,y}\big)\big(V^{\mathrm{LSE}}_{s,y}-V^{\mathrm{Str}}_{s,y}\big)}{\sum_y\big(V^{\mathrm{VSt}}_{s,y}-V^{\mathrm{Str}}_{s,y}\big)^2},\qquad\text{begrenzt auf }[0,1]</annotation></semantics></math></p>
+</div>
+<p>Beide Teilwerte und das Gewicht werden im Durchlauf des Dashboards
+gezeigt, damit sichtbar bleibt, wie stark das gemessene Signal den
+Strukturwert verändert.</p>
+<h3 class="tm-h3" id="energie-in-drei-ausbaustufen">6.4 Energie in drei
+Ausbaustufen</h3>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Stufe</th>
+<th>Wie Energie einfließt</th>
+<th>Datenquelle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Energieanteil ω(E) mit ÖSPI und ÖGPI fortgeschrieben; Verteilung
+über Öffnungstage (φᴼ); Energierechnungen stecken zusätzlich in der
+Vorsteuer</td>
+<td>Energieagentur, UVA</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>betriebliche Energieanteile aus Steuerdaten bzw. Referenzpanel</td>
+<td>Steuerdaten, Panel</td>
+</tr>
+<tr class="odd">
+<td>Ausbau</td>
+<td>Verbrauch mal Preis je Betrieb aus Smart-Meter-Daten</td>
+<td>Netzbetreiber, Rechtsgrundlage prüfen</td>
+</tr>
+</tbody>
+</table></div>
+<h2 class="tm-h2" id="schritt-3-bws-personalaufwand-und-betriebsüberschuss">7 ·
+Schritt 3: BWS, Personalaufwand und Betriebsüberschuss</h2>
+<p>Die BWS je Betriebsstätte und Monat ist der Produktionswert minus die
+kombinierten Vorleistungen. Der Personalaufwand wird daneben berechnet;
+er geht nicht in die BWS ein, sondern teilt sie in Arbeitnehmerentgelt
+und Betriebsüberschuss.</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(7.1)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>−</mo><msub><mi>V</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><mrow><mi>𝑃</mi><mi>𝐴</mi></mrow><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mi>L</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mspace width="0.167em"></mspace><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msub><mi>α</mi><mi>s</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><mtext mathvariant="italic">𝐵Ü</mtext><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>−</mo><msub><mrow><mi>𝑃</mi><mi>𝐴</mi></mrow><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}\mathit{BWS}_{i,t}&amp;=\mathit{PW}_{i,t}-V_{i,t}\\ \mathit{PA}_{i,t}&amp;=L_{i,t}\,(1+\alpha_s)\\ \textit{B\"U}_{i,t}&amp;=\mathit{BWS}_{i,t}-\mathit{PA}_{i,t}\end{aligned}</annotation></semantics></math></p>
+</div>
+<h3 class="tm-h3" id="aufschlag-α-auf-die-lohnsumme">7.1 Aufschlag α auf die
+Lohnsumme</h3>
+<p>Die mBGM-Lohnsumme enthält keine Dienstgeberbeiträge und ist an der
+Höchstbeitragsgrundlage gedeckelt. Der Aufschlag α schließt beide
+Lücken. Er wird je Branche aus der RGR bestimmt, als Verhältnis von
+Arbeitnehmerentgelt zu mBGM-Lohnsumme desselben Jahres:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(7.2)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>s</mi></msub><mo>=</mo><mfrac><msubsup><mrow><mi>𝐴</mi><mi>𝑁</mi><mi>𝐸</mi></mrow><mrow><mi>s</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">G</mi><mi mathvariant="normal">R</mi></mrow></msubsup><msubsup><mi>L</mi><mrow><mi>s</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">B</mi><mi mathvariant="normal">G</mi><mi mathvariant="normal">M</mi></mrow></msubsup></mfrac><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha_s=\frac{\mathit{ANE}^{\mathrm{RGR}}_{s,y^*}}{L^{\mathrm{mBGM}}_{s,y^*}}-1</annotation></semantics></math></p>
+</div>
+<p>Der pauschale Faktor 1,3 des Dashboard-Prototyps (gesetzliche
+Dienstgeberbeiträge) ist eine Untergrenze und gilt nur, bis die erste
+RGR-Rechnung vorliegt. Mit Steuerdaten (Stufe 2) kann α je Branche aus
+dem Personalaufwand der Unternehmen gegengeprüft werden.</p>
+<h3 class="tm-h3" id="vier-aufgaben-der-lohnkosten">7.2 Vier Aufgaben der
+Lohnkosten</h3>
+<ul>
+<li><strong>Indikator:</strong> Die Veränderung der Lohnsumme schätzt im
+Flash den Umsatz mit (β₂).</li>
+<li><strong>Struktur:</strong> Personalaufwand je Umsatz unterscheidet
+im Quotenmodell Betriebe mit viel Eigenleistung von solchen mit viel
+Fremdleistung (Querschnitt, nicht Monatsverlauf).</li>
+<li><strong>Öffnung:</strong> Beschäftigte größer null markieren
+Betriebstage.</li>
+<li><strong>Kontrolle:</strong> Personalaufwand gegen BWS ergibt die
+Lohnquote und den Betriebsüberschuss (Abschnitt 8).</li>
+</ul>
+<p>Personalkosten sind nie Vorleistungen. Ein Betrieb mit hohem
+Personalaufwand hat bei gleichem Umsatz nicht weniger BWS, sondern einen
+kleineren Betriebsüberschuss.</p>
+<h2 class="tm-h2" id="schritt-4-kontrollen-und-ampel">8 · Schritt 4: Kontrollen und
+Ampel</h2>
+<p>Drei Prüfungen vergleichen die Schätzung mit Statistik, die nicht in
+sie eingeht. Sie korrigieren nichts, sondern lösen eine Prüfung aus.
+Weil die Vergleichswerte Jahreswerte sind, laufen die Zellprüfungen auf
+gleitenden 12 Monaten; saisonale Verschiebungen fallen so weg, die Ampel
+reagiert aber träge.</p>
+<h3 class="tm-h3" id="vorleistungsquote-gegen-lse">8.1 Vorleistungsquote gegen
+LSE</h3>
+<p>Die Vorleistungsquote der Zelle über 12 Monate wird mit der Quote der
+LSE verglichen, gewichtet mit dem Umsatz der Monate:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(8.1)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>Δ</mi><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>t</mi></mrow><mrow><mi mathvariant="normal">V</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">Q</mi></mrow></msubsup><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mi>t</mi><mo>−</mo><mn>11</mn></mrow><mi>t</mi></munderover><msub><mi>V</mi><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>u</mi></mrow></msub></mrow><mrow><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mi>t</mi><mo>−</mo><mn>11</mn></mrow><mi>t</mi></munderover><msub><mi>U</mi><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>u</mi></mrow></msub></mrow></mfrac><mo>−</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mi>t</mi><mo>−</mo><mn>11</mn></mrow><mi>t</mi></munderover><msub><mi>U</mi><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>u</mi></mrow></msub><mspace width="0.167em"></mspace><msubsup><mi>v</mi><mi>s</mi><mrow><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi></mrow></msubsup></mrow><mrow><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mi>t</mi><mo>−</mo><mn>11</mn></mrow><mi>t</mi></munderover><msub><mi>U</mi><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>u</mi></mrow></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Delta^{\mathrm{VLQ}}_{s,r,t}=\frac{\sum_{u=t-11}^{t}V_{s,r,u}}{\sum_{u=t-11}^{t}U_{s,r,u}}-\frac{\sum_{u=t-11}^{t}U_{s,r,u}\,v^{\mathrm{LSE}}_{s}}{\sum_{u=t-11}^{t}U_{s,r,u}}</annotation></semantics></math></p>
+</div>
+<p>Gelb ab 2,5 Prozentpunkten Abweichung, rot ab 5 Prozentpunkten.</p>
+<h3 class="tm-h3" id="personalaufwand-gegen-rgr-lohnquote-einkommensansatz">8.2
+Personalaufwand gegen RGR-Lohnquote (Einkommensansatz)</h3>
+<p>Aus dem Personalaufwand und der Lohnquote der RGR lässt sich eine
+zweite BWS ableiten. Sie wird über 12 Monate mit der BWS aus Umsatz und
+Vorleistungen verglichen:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(8.2)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>Δ</mi><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>t</mi></mrow><mrow><mi mathvariant="normal">E</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">k</mi></mrow></msubsup><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mi>t</mi><mo>−</mo><mn>11</mn></mrow><mi>t</mi></munderover><msub><mrow><mi>𝑃</mi><mi>𝐴</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>u</mi></mrow></msub><mspace width="0.167em"></mspace><mi>/</mi><mspace width="0.167em"></mspace><msub><mrow><mi>𝐿</mi><mi>𝑄</mi></mrow><mi>s</mi></msub></mrow><mrow><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mi>t</mi><mo>−</mo><mn>11</mn></mrow><mi>t</mi></munderover><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>u</mi></mrow></msub></mrow></mfrac><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\Delta^{\mathrm{Eink}}_{s,r,t}=\frac{\sum_{u=t-11}^{t}\mathit{PA}_{s,r,u}\,/\,\mathit{LQ}_s}{\sum_{u=t-11}^{t}\mathit{BWS}_{s,r,u}}-1</annotation></semantics></math></p>
+</div>
+<p>Gelb ab 5 % Abweichung, rot ab 10 %. Die Prüfung ist gleichbedeutend
+mit der Frage, ob der Anteil des Betriebsüberschusses an der BWS nahe
+bei 1 − LQ liegt.</p>
+<h3 class="tm-h3" id="betriebsüberschuss-je-betrieb">8.3 Betriebsüberschuss je
+Betrieb</h3>
+<p>Ist der Betriebsüberschuss eines Betriebs über zwölf Monate deutlich
+negativ, kommt er auf die Prüfliste der Statistikstelle: falsche Quote,
+falsche Branchenzuordnung, Datenfehler oder ein echter Verlustbetrieb.
+Diese Prüfung wirkt auf Betriebsebene und wird nicht veröffentlicht.</p>
+<h3 class="tm-h3" id="ampel-je-zelle">8.4 Ampel je Zelle</h3>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Ampel</th>
+<th>Regel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>grün</td>
+<td>beide Zellprüfungen unter der gelben Schwelle</td>
+</tr>
+<tr class="even">
+<td>gelb</td>
+<td>mindestens eine Prüfung über der gelben, keine über der roten
+Schwelle</td>
+</tr>
+<tr class="odd">
+<td>rot</td>
+<td>mindestens eine Prüfung über der roten Schwelle</td>
+</tr>
+<tr class="even">
+<td>grau</td>
+<td>weniger als 12 Monate Daten</td>
+</tr>
+</tbody>
+</table></div>
+<p>Das Dashboard listet alle gelben und roten Zellen des Monats und
+zeigt die Zahl auffälliger Zellen im Überblick. Zusätzlich wird im
+Durchlauf gezeigt, wie weit Vorsteuer-Signal und Strukturmodell
+auseinanderliegen; große Abstände ohne gelbe Ampel sind ein Hinweis auf
+ein falsches κ.</p>
+<h2 class="tm-h2" id="schritt-5-aggregation-und-anbindung">9 · Schritt 5: Aggregation
+und Anbindung</h2>
+<p>Die Betriebswerte werden summiert und dann zweimal an amtliche
+Jahreswerte angebunden: erst das Niveau je Abschnitt an die RGR, dann
+der touristische Anteil an das RTSA. Die Reihenfolge ist fest.</p>
+<h3 class="tm-h3" id="aggregation">9.1 Aggregation</h3>
+<div class="tm-eq">
+<p><span class="tm-eqno">(9.1)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>r</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></munder><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><munder><mo>∑</mo><mi>r</mi></munder><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\mathit{BWS}_{s,r,t}=\sum_{i\in(s,r)}\mathit{BWS}_{i,t},\qquad\mathit{BWS}_{s,V,t}=\sum_{r}\mathit{BWS}_{s,r,t}</annotation></semantics></math></p>
+</div>
+<p>Summiert wird über alle Betriebsstätten einer Branche in einer
+Region; das Land ist die Summe über alle Destinationen. Veröffentlicht
+wird eine Zelle nur, wenn die Geheimhaltung erfüllt ist (Abschnitt
+14).</p>
+<h3 class="tm-h3" id="anbindung-an-die-rgr-denton">9.2 Anbindung an die RGR
+(Denton)</h3>
+<p>Die RGR veröffentlicht die BWS je Abschnitt und Bundesland. Die
+Monatsreihe des Modells für Vorarlberg wird nach dem proportionalen
+Denton-Verfahren so angepasst, dass ihre Jahressumme den RGR-Wert trifft
+und die Veränderungen von Monat zu Monat möglichst erhalten bleiben:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(9.2)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><munder><mo>min</mo><mi>x</mi></munder><mspace width="0.222em"></mspace><munder><mo>∑</mo><mrow><mi>t</mi><mo>∈</mo><mi>y</mi></mrow></munder><msup><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><msub><mi>x</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi></mrow></msub><msub><mi>m</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi></mrow></msub></mfrac><mo>−</mo><mfrac><msub><mi>x</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>m</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mspace width="1.0em"></mspace><mtext mathvariant="normal">u. d. N.</mtext><mspace width="1.0em"></mspace><munder><mo>∑</mo><mrow><mi>t</mi><mo>∈</mo><mi>y</mi></mrow></munder><msub><mi>x</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>s</mi></msub><mspace width="0.167em"></mspace><msubsup><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>A</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mi>y</mi></mrow><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">G</mi><mi mathvariant="normal">R</mi></mrow></msubsup></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><msub><mi>m</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>θ</mi><mi>s</mi></msub><mo>=</mo><mrow><mtext mathvariant="normal">Anteil der Gruppe am Abschnitt laut LSE (Abschnitt I: </mtext><mspace width="0.333em"></mspace></mrow><mi>θ</mi><mo>=</mo><mn>1</mn><mo form="postfix" stretchy="false">)</mo></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}&amp;\min_{x}\ \sum_{t\in y}\left(\frac{x_{s,t}}{m_{s,t}}-\frac{x_{s,t-1}}{m_{s,t-1}}\right)^2\quad\text{u. d. N.}\quad\sum_{t\in y}x_{s,t}=\theta_{s}\,\mathit{BWS}^{\mathrm{RGR}}_{A(s),y}\\ &amp;m_{s,t}=\mathit{BWS}_{s,V,t},\qquad\theta_s=\text{Anteil der Gruppe am Abschnitt laut LSE (Abschnitt I: }\theta=1)\end{aligned}</annotation></semantics></math></p>
+</div>
+<ul>
+<li><strong>Abschnitt I</strong> (Beherbergung und Gastronomie) wird
+direkt angebunden.</li>
+<li><strong>Abschnitte H, R und N</strong> enthalten viele nicht
+touristische Betriebe. Angebunden wird nur der Anteil der
+Tourismusgruppen am Abschnitt, gewichtet mit ihrem BWS-Anteil laut
+letzter LSE.</li>
+<li><strong>Regionen:</strong> Der monatliche Anbindungsfaktor des
+Landes gilt für alle Destinationen derselben Branche gleich; die
+regionale Verteilung kommt allein aus dem Modell.</li>
+</ul>
+<div class="tm-eq">
+<p><span class="tm-eqno">(9.3)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⋅</mo><mfrac><msub><mi>x</mi><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub></mfrac></mrow><annotation encoding="application/x-tex">x_{s,r,t}=\mathit{BWS}_{s,r,t}\cdot\frac{x_{s,V,t}}{\mathit{BWS}_{s,V,t}}</annotation></semantics></math></p>
+</div>
+<h3 class="tm-h3" id="kalibrierung-am-rtsa">9.3 Kalibrierung am RTSA</h3>
+<p>Das RTSA weist die direkte touristische BWS (TDGVA) aus. Mit der
+bestellten Zusatztabelle je Branche wird der Tourismusanteil τ je
+Branche direkt bestimmt; ohne sie gelten die nationalen Anteile der
+Bundes-TSA, und ein gemeinsamer Faktor k sorgt dafür, dass die Summe das
+RTSA trifft:</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(9.4)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>s</mi></msub><mo>=</mo><mfrac><msubsup><mrow><mi>𝑇</mi><mi>𝐷</mi><mi>𝐺</mi><mi>𝑉</mi><mi>𝐴</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">A</mi></mrow></msubsup><mrow><munder><mo>∑</mo><mrow><mi>t</mi><mo>∈</mo><mi>y</mi></mrow></munder><msub><mi>x</mi><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub></mrow></mfrac><mspace width="2.0em"></mspace><mtext mathvariant="normal">ohne Zusatztabelle:</mtext><mspace width="1.0em"></mspace><msub><mi>τ</mi><mi>s</mi></msub><mo>=</mo><msub><mi>k</mi><mi>y</mi></msub><mspace width="0.167em"></mspace><msubsup><mi>τ</mi><mi>s</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi></mrow></msubsup><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>k</mi><mi>y</mi></msub><mo>=</mo><mfrac><mrow><msubsup><mrow><mi>𝑇</mi><mi>𝐷</mi><mi>𝐺</mi><mi>𝑉</mi><mi>𝐴</mi></mrow><mi>y</mi><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">A</mi></mrow></msubsup><mo>−</mo><msub><mi>R</mi><mi>y</mi></msub></mrow><mrow><munder><mo>∑</mo><mi>s</mi></munder><msubsup><mi>τ</mi><mi>s</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi></mrow></msubsup><munder><mo>∑</mo><mrow><mi>t</mi><mo>∈</mo><mi>y</mi></mrow></munder><msub><mi>x</mi><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\tau_s=\frac{\mathit{TDGVA}^{\mathrm{RTSA}}_{s,y}}{\sum_{t\in y}x_{s,V,t}}\qquad\text{ohne Zusatztabelle:}\quad\tau_s=k_y\,\tau^{\mathrm{nat}}_s,\quad k_y=\frac{\mathit{TDGVA}^{\mathrm{RTSA}}_{y}-R_y}{\sum_s\tau^{\mathrm{nat}}_s\sum_{t\in y}x_{s,V,t}}</annotation></semantics></math></p>
+</div>
+<p>R ist der Beitrag der Branchen, die das Modell nicht abbildet
+(Verkehr außerhalb der Seilbahnen, Handel, Kultur). R wird nur für das
+Land ausgewiesen, nicht je Destination. τ gilt für alle Destinationen
+gleich, weil das RTSA nur für das Land vorliegt.</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(9.5)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>t</mi></mrow><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">r</mi></mrow></msubsup><mo>=</mo><msub><mi>τ</mi><mi>s</mi></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mrow><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><msubsup><mrow><mi>𝑇</mi><mi>𝐷</mi><mi>𝐺</mi><mi>𝑉</mi><mi>𝐴</mi></mrow><mi>y</mi><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">A</mi></mrow></msubsup><mo>=</mo><munder><mo>∑</mo><mi>s</mi></munder><msub><mi>τ</mi><mi>s</mi></msub><munder><mo>∑</mo><mrow><mi>t</mi><mo>∈</mo><mi>y</mi></mrow></munder><msub><mi>x</mi><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>+</mo><msub><mi>R</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">\mathit{BWS}^{\mathrm{tour}}_{s,r,t}=\tau_s\,x_{s,r,t},\qquad\mathit{TDGVA}^{\mathrm{RTSA}}_{y}=\sum_s\tau_s\sum_{t\in y}x_{s,V,t}+R_y</annotation></semantics></math></p>
+</div>
+<h3 class="tm-h3" id="jahre-ohne-eigenen-anker">9.4 Jahre ohne eigenen Anker</h3>
+<p>Fehlen für das laufende Jahr RGR oder RTSA, wird das Verhältnis
+zwischen amtlichem Wert und Modell im letzten verankerten Jahr y*
+übertragen; τ bleibt auf dem letzten RTSA-Wert. Die Veränderung zum
+Vorjahr kommt damit ganz aus den Monatsdaten, das Niveau aus der
+Statistik.</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(9.6)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>x</mi><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow><mrow><mi mathvariant="normal">v</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">l</mi></mrow></msubsup><mo>=</mo><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⋅</mo><mfrac><msub><mi>A</mi><mrow><mi>s</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow></msub><msub><mi>M</mi><mrow><mi>s</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow></msub></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>τ</mi><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow></msub><mo>=</mo><msub><mi>τ</mi><mrow><mi>s</mi><mo>,</mo><msup><mi>y</mi><mo>*</mo></msup></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><mi>t</mi><mo>∈</mo><mi>y</mi><mo>,</mo><mspace width="0.222em"></mspace><mi>y</mi><mo>&gt;</mo><msup><mi>y</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">x^{\mathrm{vorl}}_{s,V,t}=\mathit{BWS}_{s,V,t}\cdot\frac{A_{s,y^*}}{M_{s,y^*}},\qquad\tau_{s,y}=\tau_{s,y^*},\qquad t\in y,\ y&gt;y^*</annotation></semantics></math></p>
+</div>
+<p>Diese Werte tragen den Status „vorläufig“. Erscheint der eigene
+Jahrgang, werden alle Monate des Jahres neu gerechnet.</p>
+<h3 class="tm-h3" id="konsistenz-der-reihenfolge">9.5 Konsistenz der Reihenfolge</h3>
+<p>Kommt nach dem RTSA eine neue RGR-Rechnung für dasselbe Jahr, bleibt
+die touristische BWS laut RTSA fix: Die Monate werden neu an die RGR
+angebunden, und τ wird so neu berechnet, dass die Summe wieder das RTSA
+trifft.</p>
+<h2 class="tm-h2" id="schritt-6-veröffentlichte-kennzahlen">10 · Schritt 6:
+veröffentlichte Kennzahlen</h2>
+<p>Jede Kennzahl wird für drei Zeiträume gerechnet: den Monat, die
+laufende Saison bis zum Monat und die gleitenden 12 Monate. Alle Größen
+beziehen sich auf den touristischen Anteil; Nenner ist die
+Nächtigungszahl der Beherbergungsstatistik.</p>
+<h3 class="tm-h3" id="zeiträume">10.1 Zeiträume</h3>
+<ul>
+<li><strong>Monat:</strong> der gewählte Kalendermonat.</li>
+<li><strong>Saison bisher:</strong> Winter Oktober bis April, Sommer Mai
+bis September, kumuliert vom Saisonbeginn bis zum gewählten Monat.
+Einkäufe der Zwischensaison (Oktober, Mai) zählen so zur folgenden
+Saison. Die Saison ist die laufende Kennzahl für Margendruck und
+regionale Wirkung.</li>
+<li><strong>12 Monate:</strong> gleitende Summe der letzten zwölf
+Monate; Grundlage für Ampel und RTSA-Abgleich.</li>
+</ul>
+<div class="tm-eq">
+<p><span class="tm-eqno">(10.1)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>K</mi><mi>t</mi><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">n</mi></mrow></msubsup><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><msub><mi>t</mi><mn>0</mn></msub></mrow><mi>t</mi></munderover><msub><mi>X</mi><mi>u</mi></msub></mrow><mrow><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><msub><mi>t</mi><mn>0</mn></msub></mrow><mi>t</mi></munderover><msub><mi>N</mi><mi>u</mi></msub></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msubsup><mi>K</mi><mi>t</mi><mn>12</mn></msubsup><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mi>t</mi><mo>−</mo><mn>11</mn></mrow><mi>t</mi></munderover><msub><mi>X</mi><mi>u</mi></msub></mrow><mrow><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mi>t</mi><mo>−</mo><mn>11</mn></mrow><mi>t</mi></munderover><msub><mi>N</mi><mi>u</mi></msub></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>t</mi><mn>0</mn></msub><mo>=</mo><mtext mathvariant="normal">Oktober bzw. Mai</mtext></mrow><annotation encoding="application/x-tex">K^{\mathrm{Saison}}_{t}=\frac{\sum_{u=t_0}^{t}X_u}{\sum_{u=t_0}^{t}N_u},\qquad K^{12}_{t}=\frac{\sum_{u=t-11}^{t}X_u}{\sum_{u=t-11}^{t}N_u},\qquad t_0=\text{Oktober bzw. Mai}</annotation></semantics></math></p>
+</div>
+<h3 class="tm-h3" id="kennzahlen">10.2 Kennzahlen</h3>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Bereich</th>
+<th>Kennzahl</th>
+<th>Berechnung</th>
+<th>Amtlicher Vergleich</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nachfrage</td>
+<td>Nächtigungen</td>
+<td>Summe laut Beherbergungsstatistik</td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>Nachfrage</td>
+<td>Veränderung gegenüber Vorjahr, %</td>
+<td>Nächtigungen ÷ Vorjahreszeitraum − 1</td>
+<td>–</td>
+</tr>
+<tr class="odd">
+<td>Wertschöpfung</td>
+<td>Touristische BWS, Mio €</td>
+<td>BWSᵗᵒᵘʳ nach Anbindung</td>
+<td>RTSA (nur Land, 12 Monate)</td>
+</tr>
+<tr class="even">
+<td>Wertschöpfung</td>
+<td>Umsatz je Nächtigung, €</td>
+<td>touristischer Umsatz (τ × U) ÷ N</td>
+<td>RTSA-Produktion ÷ Nächtigungen, Jahresschnitt Land</td>
+</tr>
+<tr class="odd">
+<td>Wertschöpfung</td>
+<td>BWS je Nächtigung, €</td>
+<td>BWSᵗᵒᵘʳ ÷ N</td>
+<td>RTSA ÷ Nächtigungen, Jahresschnitt Land</td>
+</tr>
+<tr class="even">
+<td>Vorleistungen</td>
+<td>Vorleistungen je Nächtigung, €</td>
+<td>(touristischer Umsatz − BWSᵗᵒᵘʳ) ÷ N</td>
+<td>RTSA-Vorleistungen ÷ Nächtigungen</td>
+</tr>
+<tr class="odd">
+<td>Vorleistungen</td>
+<td>Vorleistungsquote, %</td>
+<td>V ÷ U</td>
+<td>LSE, umsatzgewichtet</td>
+</tr>
+<tr class="even">
+<td>Arbeit</td>
+<td>Beschäftigte (Saison: Ø je Monat)</td>
+<td>τ × E, Köpfe</td>
+<td>–</td>
+</tr>
+<tr class="odd">
+<td>Arbeit</td>
+<td>Lohnsumme je Nächtigung, €</td>
+<td>τ × L ÷ N</td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>Arbeit</td>
+<td>BWS je Beschäftigtem und Monat, €</td>
+<td>BWSᵗᵒᵘʳ ÷ (τ × E)</td>
+<td>–</td>
+</tr>
+<tr class="odd">
+<td>Arbeit</td>
+<td>Personalaufwand in % der BWS</td>
+<td>τ × PA ÷ BWSᵗᵒᵘʳ</td>
+<td>RGR-Lohnquote, umsatzgewichtet</td>
+</tr>
+</tbody>
+</table></div>
+<p>Die Kalibrierung verändert die BWS, nicht den Umsatz. Die
+Vorleistungen je Nächtigung werden deshalb als Umsatz minus kalibrierte
+BWS ausgewiesen, damit Umsatz, BWS und Vorleistungen je Nächtigung
+zusammenpassen.</p>
+<h3 class="tm-h3" id="abgleich-mit-dem-rtsa">10.3 Abgleich mit dem RTSA</h3>
+<p>Im Dashboard werden die gleitenden 12 Monate der Auswahl mit dem
+letzten veröffentlichten RTSA verglichen: touristische BWS (nur für das
+Land), BWS, Umsatz und Vorleistungen je Nächtigung sowie die
+Vorleistungsquote. Für Destinationen ist das ein Vergleich mit dem
+Landesschnitt. Monate des RTSA-Jahres selbst sind auf das RTSA
+kalibriert und weichen daher kaum ab. Alle Vergleiche laufen gegen
+amtliche Werte, nie gegen frühere Stände des Modells.</p>
+<p>Amtliche Vergleichswerte sind Jahreswerte. Eine Saison liegt allein
+deshalb anders; aussagekräftig ist, wie sich der Abstand im Lauf der
+Saison verändert.</p>
+<h2 class="tm-h2" id="ausbaustufen-was-ohne-neue-erhebung-geht">11 · Ausbaustufen: was
+ohne neue Erhebung geht</h2>
+<p>Keine Stufe braucht Buchhaltungsdaten einzelner Betriebe. Jede Stufe
+nutzt dieselben Formeln; sie unterscheiden sich nur darin, auf welcher
+Ebene gerechnet wird und woher die Parameter kommen.</p>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Stufe</th>
+<th>Daten</th>
+<th>Ergebnis</th>
+<th>Aufwand Betriebe</th>
+<th>Rechtsgrundlage, Datenschutz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>0 · Öffentlich</strong></td>
+<td>LSE, IO-Tabelle, RGR, RTSA, Nächtigungen, Beschäftigte nach Branche
+(Open Data der Sozialversicherung), VPI, Energiepreise</td>
+<td>monatliche BWS je Branche für Vorarlberg; grob je Destination</td>
+<td>keiner</td>
+<td>keine; nur veröffentlichte Aggregate</td>
+</tr>
+<tr class="even">
+<td><strong>1 · Register</strong></td>
+<td>zusätzlich UVA und mBGM je Betrieb, verknüpft bei der
+Statistikstelle</td>
+<td>BWS je Gemeinde und Destination, Vorsteuer-Signal, Status je
+Betrieb</td>
+<td>keiner, die Meldungen gibt es schon</td>
+<td>Auftrag an die Statistikstelle; Einzeldaten verlassen sie nie</td>
+</tr>
+<tr class="odd">
+<td>2 · Steuerdaten (optional)</td>
+<td>zusätzlich jährliche Steuer- bzw. LSE-Mikrodaten</td>
+<td>betriebsindividuelle Quote, z, λ, c</td>
+<td>keiner</td>
+<td>wie Stufe 1</td>
+</tr>
+<tr class="even">
+<td>3 · Referenzpanel (optional)</td>
+<td>freiwilliger Export aus der Buchhaltung weniger Betriebe</td>
+<td>gemessenes Kostenverhalten je Saison, Test des
+Vorsteuer-Signals</td>
+<td>nur Freiwillige</td>
+<td>Einwilligung, kein Gesetz</td>
+</tr>
+</tbody>
+</table></div>
+<p>Stufe 0 kann sofort starten. Stufe 1 ist der eigentliche Monitor; die
+einzige offene Frage dort ist der Auftrag an die Statistikstelle, nicht
+eine neue Meldepflicht.</p>
+<h3 class="tm-h3" id="stufe-0-in-drei-zeilen">11.1 Stufe 0 in drei Zeilen</h3>
+<p>Ohne Betriebsdaten rechnet das Modell direkt auf Branchenebene für
+das Land. Der Produktionswert kommt aus der LSE und wird mit
+Nächtigungen, Beschäftigten und Preisen fortgeschrieben; die
+Vorleistungen kommen nur aus dem Strukturmodell (κ = 0):</p>
+<div class="tm-eq">
+<p><span class="tm-eqno">(11.1)</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><msub><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msubsup><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>y</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi></mrow></msubsup><mo>⋅</mo><msub><mi>m</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⋅</mo><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><mn>1</mn><mo>+</mo><msub><mover><mi>g</mi><mo accent="true">̂</mo></mover><mrow><mi>s</mi><mo>,</mo><mi>t</mi></mrow></msub><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><mi>V</mi><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow></msub><mspace width="0.167em"></mspace><msub><mover><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mo accent="true">̂</mo></mover><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>y</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>φ</mi><mi>s</mi><mi>F</mi></msubsup><mspace width="0.167em"></mspace><mfrac><mn>1</mn><mn>12</mn></mfrac><mo>+</mo><msubsup><mi>φ</mi><mi>s</mi><mi>O</mi></msubsup><mspace width="0.167em"></mspace><mfrac><msub><mi>O</mi><mrow><mi>s</mi><mo>,</mo><mi>t</mi></mrow></msub><msub><mover><mi>O</mi><mo accent="true">̂</mo></mover><mrow><mi>s</mi><mo>,</mo><mi>y</mi></mrow></msub></mfrac><mo>+</mo><msubsup><mi>φ</mi><mi>s</mi><mi>U</mi></msubsup><mspace width="0.167em"></mspace><mfrac><msub><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub><msub><mover><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mo accent="true">̂</mo></mover><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>y</mi></mrow></msub></mfrac><mo form="postfix" stretchy="true">]</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><mrow><mi>𝐵</mi><mi>𝑊</mi><mi>𝑆</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mrow><mi>𝑃</mi><mi>𝑊</mi></mrow><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>−</mo><msub><mi>V</mi><mrow><mi>s</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>t</mi></mrow></msub></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}\mathit{PW}_{s,V,t}&amp;=\mathit{PW}^{\mathrm{LSE}}_{s,V,y-1}\cdot m_{s,t}\cdot\big(1+\hat g_{s,t}\big)\\ V_{s,V,t}&amp;=\hat v_{s,y}\,\widehat{\mathit{PW}}_{s,V,y}\left[\varphi^{F}_{s}\,\frac{1}{12}+\varphi^{O}_{s}\,\frac{O_{s,t}}{\hat O_{s,y}}+\varphi^{U}_{s}\,\frac{\mathit{PW}_{s,V,t}}{\widehat{\mathit{PW}}_{s,V,y}}\right]\\ \mathit{BWS}_{s,V,t}&amp;=\mathit{PW}_{s,V,t}-V_{s,V,t}\end{aligned}</annotation></semantics></math></p>
+</div>
+<ul>
+<li><strong>PWᴸˢᴱ:</strong> Produktionswert der Branche in Vorarlberg
+laut letzter LSE.</li>
+<li><strong>m(s, t):</strong> Monatsanteil im Jahr aus dem Profil der
+Nächtigungen (Beherbergung) bzw. der Beschäftigten (übrige Branchen) des
+Vorjahres.</li>
+<li><strong>ĝ(s, t):</strong> Veränderung gegenüber dem Vorjahresmonat
+aus dem Nowcast (Abschnitt 5.2) auf Branchenebene.</li>
+<li><strong>Personal:</strong> Beschäftigte nach Bundesland und
+Wirtschaftszweig (Open Data) mal Personalaufwand je Beschäftigtem aus
+der LSE.</li>
+</ul>
+<h3 class="tm-h3" id="was-ohne-betriebsdaten-verloren-geht">11.2 Was ohne
+Betriebsdaten verloren geht</h3>
+<p>Die Landessumme je Branche bleibt belastbar, weil sie jährlich an RGR
+und RTSA angebunden wird. Ungenauer werden drei Dinge: Unterschiede
+zwischen Betrieben (alle Betriebe einer Branche haben dieselbe Quote),
+kleine Regionen (Destinationswerte hängen am Branchenmix) und der
+Saisonverlauf der Kosten (folgt der Zuordnung der Gütergruppen, nicht
+gemessenen Monatskosten). Das Fehlerband ist entsprechend breiter.</p>
+<h2 class="tm-h2" id="alle-parameter">12 · Alle Parameter</h2>
+<p>Jeder Parameter hat eine Hauptquelle und eine Regel für die Zeit, bis
+sein eigener Jahrgang vorliegt. Der Verzug zählt ab Ende des
+Bezugsjahres. Wie Verzug und Revision zusammenwirken, beschreibt das
+Dokument „Rekalibrierung des BWS-Modells“ im Detail.</p>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Bedeutung</th>
+<th>Bereich</th>
+<th>Hauptquelle</th>
+<th>Verzug</th>
+<th>Neu gesetzt</th>
+<th>Bis dahin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>z(i)</td>
+<td>Zuschlag Produktionswert gegenüber Umsatz</td>
+<td>meist ± wenige %</td>
+<td>Steuerdaten</td>
+<td>12–18 Monate</td>
+<td>jährlich</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>v(s), v̂ᴹ</td>
+<td>Vorleistungsquote, Modellwert</td>
+<td>0–1</td>
+<td>LSE</td>
+<td>≈ 18 Monate</td>
+<td>mit jeder LSE</td>
+<td>letzter Jahrgang, preisfortgeschrieben</td>
+</tr>
+<tr class="odd">
+<td>λ(i), n₀</td>
+<td>Gewicht eigener Historie, Glättungskonstante</td>
+<td>0–1; &gt; 0</td>
+<td>Steuerdaten, Backtesting</td>
+<td>12–18 Monate</td>
+<td>jährlich</td>
+<td>λ = 0, n₀ = 2</td>
+</tr>
+<tr class="even">
+<td>ω(k)</td>
+<td>Struktur der Vorleistungen nach Art</td>
+<td>0–1, Summe 1</td>
+<td>IO-Tabelle, optional Panel</td>
+<td>≈ 3 Jahre</td>
+<td>mit neuer IO-Tabelle</td>
+<td>letzte Tabelle</td>
+</tr>
+<tr class="odd">
+<td>P(k), Pᴾᵂ</td>
+<td>Preisindizes</td>
+<td>Index</td>
+<td>VPI, ÖSPI, ÖGPI</td>
+<td>2–6 Wochen</td>
+<td>monatlich</td>
+<td>Vormonat</td>
+</tr>
+<tr class="even">
+<td>φᶠ, φᴼ, φᵁ</td>
+<td>Fix-, Öffnungs-, Umsatzanteil</td>
+<td>je 0–1, Summe 1</td>
+<td>IO-Tabelle, optional Panel</td>
+<td>≈ 3 Jahre bzw. 2–3 Monate</td>
+<td>mit neuer Tabelle oder Panel-Jahr</td>
+<td>letzter Wert</td>
+</tr>
+<tr class="odd">
+<td>O</td>
+<td>Öffnungstage</td>
+<td>0–31</td>
+<td>Nächtigungen, Versicherungsstand, Saisonkalender</td>
+<td>Tage</td>
+<td>monatlich</td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>s̄(s)</td>
+<td>effektiver Vorsteuersatz</td>
+<td>0,10–0,20</td>
+<td>IO-Tabelle</td>
+<td>≈ 3 Jahre</td>
+<td>mit neuer IO-Tabelle</td>
+<td>letzte Tabelle</td>
+</tr>
+<tr class="odd">
+<td>inv(s)</td>
+<td>Investitionsanteil der Einkäufe</td>
+<td>0–1</td>
+<td>LSE</td>
+<td>≈ 18 Monate</td>
+<td>mit jeder LSE</td>
+<td>letzter Jahrgang</td>
+</tr>
+<tr class="even">
+<td>zus(s)</td>
+<td>Zuschlag für Vorleistungen ohne Vorsteuer</td>
+<td>≥ 0</td>
+<td>Bilanzdatenbank, IO-Tabelle</td>
+<td>12–18 Monate</td>
+<td>jährlich</td>
+<td>letzter Jahrgang</td>
+</tr>
+<tr class="odd">
+<td>c</td>
+<td>Umrechnungsfaktor Vorsteuer → Vorleistungen</td>
+<td>&gt; 0</td>
+<td>aus inv und zus; mit Steuerdaten je Betrieb</td>
+<td>wie inv, zus</td>
+<td>jährlich</td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>κ(s)</td>
+<td>Gewicht des Vorsteuer-Signals</td>
+<td>0–1</td>
+<td>Backtesting gegen LSE</td>
+<td>≈ 18 Monate</td>
+<td>mit jeder LSE ab zwei Jahren</td>
+<td>0,5 (Flash: 0)</td>
+</tr>
+<tr class="odd">
+<td>β(s)</td>
+<td>Koeffizienten des Umsatz-Nowcasts</td>
+<td>–</td>
+<td>Regression auf Monate mit UVA</td>
+<td>≈ 2 Monate</td>
+<td>jährlich im Jänner</td>
+<td>letzte Schätzung</td>
+</tr>
+<tr class="even">
+<td>q</td>
+<td>Umsatzanteil der Quartalszahler</td>
+<td>0–1</td>
+<td>Tourismusbeitrag § 8</td>
+<td>Vorjahr</td>
+<td>jährlich</td>
+<td>letzter Wert</td>
+</tr>
+<tr class="odd">
+<td>α(s)</td>
+<td>Aufschlag auf die mBGM-Lohnsumme</td>
+<td>&gt; 0</td>
+<td>RGR (Arbeitnehmerentgelt)</td>
+<td>≈ 12 Monate, revidiert bis 24</td>
+<td>mit jeder RGR</td>
+<td>0,3 (gesetzliche Beiträge)</td>
+</tr>
+<tr class="even">
+<td>LQ(s)</td>
+<td>Lohnquote, Referenz der Ampel</td>
+<td>0–1</td>
+<td>RGR</td>
+<td>≈ 12 Monate</td>
+<td>mit jeder RGR</td>
+<td>letzter Jahrgang</td>
+</tr>
+<tr class="odd">
+<td>BWSᴿᴳᴿ(A)</td>
+<td>Jahresanker je Abschnitt</td>
+<td>€</td>
+<td>RGR</td>
+<td>12 bzw. 24 Monate</td>
+<td>Dezember t + 1, t + 2</td>
+<td>Fortschreibung (Formel 9.6)</td>
+</tr>
+<tr class="even">
+<td>τ(s), R</td>
+<td>Tourismusanteil, Beitrag übriger Branchen</td>
+<td>0–1; €</td>
+<td>RTSA, ohne Zusatztabelle Bundes-TSA</td>
+<td>≈ 22 Monate</td>
+<td>Oktober t + 2</td>
+<td>letzter RTSA-Jahrgang</td>
+</tr>
+<tr class="odd">
+<td>k</td>
+<td>gemeinsamer Faktor ohne Zusatztabelle</td>
+<td>≈ 1</td>
+<td>RTSA</td>
+<td>≈ 22 Monate</td>
+<td>mit τ</td>
+<td>letzter Wert</td>
+</tr>
+<tr class="even">
+<td>Schwellen</td>
+<td>Ampel: 2,5 / 5 Pp. (Quote), 5 / 10 % (Lohnquote)</td>
+<td>–</td>
+<td>Festlegung</td>
+<td>–</td>
+<td>bei Bedarf</td>
+<td>–</td>
+</tr>
+</tbody>
+</table></div>
+<h2 class="tm-h2" id="produktionskalender-und-revisionskette">13 · Produktionskalender
+und Revisionskette</h2>
+<p>Jeder Berichtsmonat durchläuft zwei Veröffentlichungen und danach bis
+zu fünf Revisionen. Jeder Stand wird mit Status und Datum
+gekennzeichnet; ältere Stände bleiben im Archiv.</p>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Stand</th>
+<th>Zeitpunkt nach Ende des Zeitraums</th>
+<th>Eingang</th>
+<th>Produktionsschritt</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>intern</td>
+<td>Monat · Tag 1–5</td>
+<td>Nächtigungen (Gästemeldewesen)</td>
+<td>Nachfrage und Öffnungstage aufbereiten</td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>intern</td>
+<td>Monat · Tag ≈ 15</td>
+<td>Lohnsumme, Beschäftigte, VPI</td>
+<td>Personal einlesen; Umsatz aller Betriebe imputieren</td>
+<td>–</td>
+</tr>
+<tr class="odd">
+<td><strong>Flash</strong></td>
+<td>Monat · Tag ≈ 25</td>
+<td>Beherbergungsstatistik</td>
+<td>Flash-BWS rechnen (κ = 0), prüfen, freigeben; nur Land und
+Branchen</td>
+<td>Flash</td>
+</tr>
+<tr class="even">
+<td>intern</td>
+<td>Monat · Tag ≈ 46</td>
+<td>UVA der Monatszahler</td>
+<td>Umsatz und Vorsteuer ersetzen, Ausreißerprüfung</td>
+<td>–</td>
+</tr>
+<tr class="odd">
+<td><strong>Regulär</strong></td>
+<td>Monat · Tag ≈ 55–60</td>
+<td>–</td>
+<td>reguläre BWS mit κ rechnen und freigeben; alle Ebenen nach
+Geheimhaltung</td>
+<td>vorläufig</td>
+</tr>
+<tr class="even">
+<td>Revision 1</td>
+<td>Quartal · + ≈ 2,5 Monate</td>
+<td>UVA der Quartalszahler</td>
+<td>Imputation ersetzen; Gemeinden quartalsweise</td>
+<td>vorläufig</td>
+</tr>
+<tr class="odd">
+<td>Revision 2</td>
+<td>Jahr · Dezember t + 1</td>
+<td>RGR, erste Rechnung</td>
+<td>Denton-Anbindung je Abschnitt, α und LQ neu</td>
+<td>angebunden</td>
+</tr>
+<tr class="even">
+<td>Revision 3</td>
+<td>Jahr · ≈ Juni t + 2</td>
+<td>LSE</td>
+<td>v, inv, κ des eigenen Jahres; Vorleistungen neu</td>
+<td>angebunden</td>
+</tr>
+<tr class="odd">
+<td>Revision 4</td>
+<td>Jahr · Oktober t + 2</td>
+<td>RTSA</td>
+<td>τ, R, k kalibrieren</td>
+<td>kalibriert</td>
+</tr>
+<tr class="even">
+<td>Revision 5</td>
+<td>Jahr · Dezember t + 2, weitere bis t + 4</td>
+<td>RGR mit LSE</td>
+<td>erneute Anbindung; τ neu ableiten; Modellfehler veröffentlichen</td>
+<td>endgültig</td>
+</tr>
+<tr class="odd">
+<td>Parameter</td>
+<td>Jahr · t + 12–18</td>
+<td>Steuerdaten (Stufe 2)</td>
+<td>Quote je Betrieb, z, λ, c neu schätzen</td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>Parameter</td>
+<td>Jahr · Jänner</td>
+<td>Vorjahresmonate mit UVA</td>
+<td>β neu schätzen</td>
+<td>–</td>
+</tr>
+</tbody>
+</table></div>
+<p>Beispiel Jänner 2027: Der Flash Ende Februar 2027 rechnet mit der LSE
+2024, der ersten RGR 2025 und dem RTSA 2024. Seinen eigenen Jahrgang
+erhält der Monat mit der RGR im Dezember 2028, der LSE im Juni 2029 und
+dem RTSA im Oktober 2029; endgültig ist er mit der RGR im Dezember 2029,
+rund 35 Monate nach Monatsende.</p>
+<h3 class="tm-h3" id="rollen">13.1 Rollen</h3>
+<div class="tm-card tm-tblwrap"><table class="tm-tbl">
+
+<thead>
+<tr class="header">
+<th>Rolle</th>
+<th>Liefert</th>
+<th>Rechnet</th>
+<th>Sieht</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Statistikstelle (Statistik Austria oder Landesstatistik)</td>
+<td>Registerverknüpfung, RGR</td>
+<td>BWS-Modell, Imputation, Geheimhaltung</td>
+<td>Mikrodaten</td>
+</tr>
+<tr class="even">
+<td>Land Vorarlberg (Tourismusabteilung)</td>
+<td>Aufträge für RTSA und Sonderauswertungen</td>
+<td>–</td>
+<td>Aggregate, Methodenbericht</td>
+</tr>
+<tr class="odd">
+<td>WIFO</td>
+<td>RTSA inklusive Zusatztabelle je Branche</td>
+<td>ASCANIO</td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>Vorarlberg Tourismus, Destinationen</td>
+<td>Gästemeldewesen</td>
+<td>–</td>
+<td>Aggregate ab 10 Betrieben</td>
+</tr>
+<tr class="odd">
+<td>Referenzpanel-Betriebe und Steuerberatung</td>
+<td>unterjährige Kostenarten</td>
+<td>–</td>
+<td>eigene Werte plus Benchmark</td>
+</tr>
+<tr class="even">
+<td>alle übrigen Betriebe</td>
+<td>nichts zusätzlich</td>
+<td>–</td>
+<td>eigene Kennzahlen plus Benchmark</td>
+</tr>
+</tbody>
+</table></div>
+<h2 class="tm-h2" id="qualität-geheimhaltung-grenzen">14 · Qualität, Geheimhaltung,
+Grenzen</h2>
+<h3 class="tm-h3" id="qualitätsmaße">14.1 Qualitätsmaße</h3>
+<ul>
+<li><strong>Anteil gemessen:</strong> Anteil des Umsatzes einer Zelle
+mit Status A oder B. Wird je Zelle und Monat gezeigt.</li>
+<li><strong>Modellfehler je Verzugsstufe:</strong> Abstand zwischen
+Flash, regulärem Wert und endgültigem Wert, jährlich
+veröffentlicht.</li>
+<li><strong>Fehlerband:</strong> aus den bisherigen Revisionen je
+Verzugsstufe; bis Revisionen aus zwei Jahren vorliegen, gilt ein fester
+Aufschlag von ± 10 % auf das Niveau. Im Flash zusätzlich die Residuen
+des Nowcasts.</li>
+<li><strong>Ampel:</strong> Zahl der gelben und roten Zellen im
+Monat.</li>
+</ul>
+<h3 class="tm-h3" id="geheimhaltung">14.2 Geheimhaltung</h3>
+<p>Zellen mit weniger als zehn Betrieben oder einem dominanten Betrieb
+werden nicht veröffentlicht; sie gehen nur in höhere Summen ein. Die
+Dominanzregel legt die Statistikstelle fest. Seilbahnen sind wegen
+weniger, großer Betreiber je Destination besonders betroffen.</p>
+<h3 class="tm-h3" id="grenzen-und-annahmen">14.3 Grenzen und Annahmen</h3>
+<ul>
+<li>UVA und mBGM melden je Unternehmen am Sitz, nicht je Betriebsstätte;
+Mehrbetriebs-Unternehmen werden nach Betten oder Beschäftigten
+verteilt.</li>
+<li>Die Vorsteuer folgt dem Rechnungsdatum; Einkäufe vor Saisonbeginn
+erscheinen früher als ihr Verbrauch. Die Glättung mildert das nur.</li>
+<li>Investitionen sind in der Vorsteuer nicht getrennt;
+Investitionsanteil und Kappung sind Annahmen.</li>
+<li>Die Preisfortschreibung unterstellt eine gleichbleibende
+Mengenintensität; Energiesparen zeigt erst die nächste LSE.</li>
+<li>LSE, RGR und RTSA sind Jahreswerte mit ein bis drei Jahren Verzug.
+Im laufenden Jahr ist das Niveau unsicherer als die Veränderung zum
+Vorjahr.</li>
+<li>Tourismusanteile liegen nur für das Land vor und gelten für alle
+Destinationen gleich.</li>
+<li>Ein Unternehmen zählt ganz zu einer Branche (Hauptätigkeit).</li>
+<li>Mischunternehmen werden in RGR und Modell unter Umständen
+verschieden zugeordnet.</li>
+<li>Die erste RGR-Rechnung nutzt Vorjahresquoten und UVA wie das Modell
+selbst und ist daher kein unabhängiger Test.</li>
+<li>Vorarlberg hat bisher nur ein RTSA-Jahr (2023) als Referenz.</li>
+</ul>
+<h2 class="tm-h2" id="offene-punkte">15 · Offene Punkte</h2>
+<ul>
+<li><strong>Registerzugang:</strong> Darf die Statistikstelle UVA
+(inklusive Vorsteuer-Felder), mBGM und Steuerdaten für Landeszwecke
+verknüpfen und das Modell betreiben? Ohne das bleibt Stufe 0.</li>
+<li><strong>ID-Mapping</strong> Betriebsstätte ↔︎ Steuernummer ↔︎
+Dienstgebernummer als eigenes Arbeitspaket im Pilot.</li>
+<li><strong>Bestellungen:</strong> RTSA jährlich mit Zusatztabelle je
+Branche; RGR-Sonderauswertung auf Klassenebene für die Abschnitte H, R
+und N.</li>
+<li><strong>Bewertung der RTSA-Werte</strong> (Markt- oder
+Herstellungspreise) schriftlich klären.</li>
+<li><strong>Startwert κ = 0,5</strong> bestätigen; empirisch gestützt
+erst ab zwei LSE-Jahren mit UVA-Daten.</li>
+<li><strong>Veröffentlichungstermine</strong> von LSE, RGR, IO-Tabelle
+und RTSA mit den Kalendern von Statistik Austria und WIFO
+abgleichen.</li>
+<li><strong>Statuscodes A–F, K</strong> mit der Statistikstelle
+abstimmen.</li>
+<li><strong>Zuordnung der Gütergruppen</strong> zu fix, öffnungs- und
+umsatzabhängig dokumentieren; Stichprobenplan für das
+Referenzpanel.</li>
+<li><strong>Bearbeitungszeit</strong> nach UVA-Frist messen und Termine
+für Flash und regulären Wert fixieren.</li>
+<li><strong>Dashboard</strong> auf diese Fassung umstellen
+(Aufgabenliste im Dokument „Rekalibrierung des BWS-Modells“, Abschnitt
+7).</li>
+</ul>
+
+</div>
+</main>
+<footer class="vf">
+  <div class="vf-in">
+    <div>
+      <h4>Über diesen Prototyp</h4>
+      <p>Veranschaulichung einer monatlichen Schätzung der touristischen Bruttowertschöpfung aus vorhandenen Verwaltungsdaten (UVA, Lohndaten, Beherbergungsstatistik), kalibriert am regionalen Tourismus-Satellitenkonto.</p>
+      <p><strong style="color:#fff">Alle Zahlen und Destinationen sind fiktiv.</strong> Die Seite ist keine amtliche Statistik und keine Veröffentlichung des Landes Vorarlberg oder von Vorarlberg Tourismus.</p>
+    </div>
+    <div>
+      <h4>Stand</h4>
+      <p>Arbeitsstand November 2026, kombiniertes Modell<br>Projekt „Tourismusmonitor Vorarlberg 2030“</p>
+      <p><a href="executive-summary.html" style="color:#fff">Executive Summary</a> · <a href="modell.html" style="color:#fff">Modell</a> · <a href="kennzahlenproduktion.html" style="color:#fff">Kennzahlenproduktion</a></p>
+    </div>
+  </div>
+  <div class="vf-bar"></div>
+</footer>
+</body>
+</html>
