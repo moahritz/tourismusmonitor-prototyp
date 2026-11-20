@@ -58,14 +58,14 @@
     </nav>
     <div class="vh-proto">Prototyp · fiktive Daten</div>
   </div>
-  <nav class="vh-sub" aria-label="Auf dieser Seite"><div class="vh-sub-in"><a href="#ueberblick">Überblick</a><a href="#datenkatalog">Datenkatalog</a><a href="#parameter">Daten und Parameter</a><a href="#beispiel">Beispiel einer Lieferung</a><a href="#kalender">Lieferkalender</a><a href="#anhang-export">Anhang: Export aus BMD und DATEV</a></div></nav>
+  <nav class="vh-sub" aria-label="Auf dieser Seite"><div class="vh-sub-in"><a href="#ueberblick">Überblick</a><a href="#datenkatalog">Datenkatalog</a><a href="#parameter">Daten und Parameter</a><a href="#regeln">Regeln</a><a href="#beispiel">Beispiel einer Lieferung</a><a href="#kalender">Lieferkalender</a><a href="#anhang-export">Anhang: Export aus BMD und DATEV</a></div></nav>
 </header>
 
 <main class="page">
 <div class="tm">
   <p class="tm-kicker">Referenzpanel</p>
   <h1 class="tm-title">Was das Referenzpanel erhebt und wofür</h1>
-  <p class="tm-note">Stand: 20. November 2026 · Moritz · ergänzt Modell (Abschnitte 4, 6, 12) und das Konzept „Freiwilliges Referenzpanel“ vom 16. November 2026</p>
+  <p class="tm-note">Stand: 20. November 2026 · Moritz · Methodik im <a href="modell.html#parameter-aus-dem-referenzpanel">Modell, Abschnitt 6.5</a>; Governance und Anreize im Konzept „Freiwilliges Referenzpanel“ vom 16. November 2026</p>
   <p class="tm-lead">Rund <b>150 bis 300</b> freiwillige Betriebe liefern über ihre Steuerberatung einmal im Quartal Monatswerte zu <b>fünf Kostenblöcken</b> und ihren Investitionen. Alles andere verknüpft die Statistikstelle aus Registern. Das Panel liefert keine Werte für das Dashboard, sondern <b>acht Strukturparameter</b>, die heute 18 Monate bis rund 3 Jahre alt sind.</p>
 
   <section class="tm-sec" id="ueberblick">
@@ -113,11 +113,24 @@
 
   <section class="tm-sec" id="parameter">
     <h2 class="tm-h2">Daten und Parameter</h2>
-    <p class="tm-sub">Welche Größe welchen Parameter trägt. Gefüllter Punkt: Größe ist für die Schätzung nötig. Offener Punkt: Größe verbessert die Schätzung, ist aber nicht zwingend. Ein Klick auf einen Spaltenkopf oder eine Parameterkarte hebt die Spalte hervor.</p>
+    <p class="tm-sub">Welche Größe welchen Parameter trägt. Gefüllter Punkt: Größe ist für die Schätzung nötig. Offener Punkt: Größe verbessert die Schätzung, ist aber nicht zwingend. Ein Klick auf einen Spaltenkopf oder eine Parameterkarte hebt die Spalte hervor. Formelnummern beziehen sich auf die <a href="modell.html#parameter-aus-dem-referenzpanel">Modellbeschreibung</a>.</p>
     <div class="tm-card tm-tblwrap" style="background:#fff!important;padding:8px 0 0">
       <table class="rp-mx" id="rp-matrix"></table>
     </div>
     <div class="rp-params" id="rp-params"></div>
+  </section>
+
+  <section class="tm-sec">
+    <h2 class="tm-h2" id="regeln">Regeln für den Einsatz der Panelwerte</h2>
+    <div class="tm-card tm-tblwrap"><table class="tm-tbl">
+      <tbody>
+        <tr><td><strong>Gate G2</strong></td><td>Panelwerte gehen erst in den Monitor ein, wenn das Backtesting im Pilot einen kleineren Fehler zeigt. Vorschlag: Fehler der Monatsvorleistungen mindestens 20 % kleiner in Beherbergung, Gastronomie und Bergbahn, geprüft mit Kreuzvalidierung je Destination. Bis dahin gilt W = 0, μ = 1 und π = 1/3.</td></tr>
+        <tr><td><strong>Mischung</strong></td><td>Panelwerte ersetzen amtliche Werte nicht, sondern werden nach ihrer Genauigkeit gemischt (Gewicht W, Modell Formel 6.9); in den ersten zwei Panelsaisonen höchstens 0,5. Das Niveau der Vorleistungsquote bleibt bei der LSE.</td></tr>
+        <tr><td><strong>Rückwirkung</strong></td><td>Ein neuer Parameterstand gilt ab dem nächsten regulären Wert und rückwirkend für die gemessene Saison; jeder Wert trägt seinen Parameterstand.</td></tr>
+        <tr><td><strong>Ebene</strong></td><td>Geschätzt wird je Tourismusgruppe, nicht je Schicht oder Destination. Seilbahnen: Vollerhebung aller Betreiber prüfen statt Stichprobe.</td></tr>
+        <tr><td><strong>Voraussetzung</strong></td><td>Stufe 1: Die Statistikstelle verknüpft UVA (inklusive Vorsteuer) und mBGM. Ohne diesen Zugang lassen sich s̄, κ und π nicht schätzen, und das Panel müsste Umsätze abfragen.</td></tr>
+      </tbody>
+    </table></div>
   </section>
 
   <section class="tm-sec" id="beispiel">
@@ -137,7 +150,7 @@
 
   <section class="tm-sec" id="kalender">
     <h2 class="tm-h2">Lieferkalender</h2>
-    <p class="tm-sub">Vier Lieferungen im Jahr, jeweils rund einen Monat nach Quartalsende. Neue Parameter werden zweimal gesetzt, sobald eine Saison vollständig geliefert ist; Lieferungen mitten in der Saison dienen nur der Prüfung.</p>
+    <p class="tm-sub">Vier Lieferungen im Jahr, jeweils rund einen Monat nach Quartalsende. Neue Parameter werden zweimal gesetzt, sobald eine Saison vollständig geliefert ist, und gelten rückwirkend für die gemessene Saison (Revision 1); Lieferungen mitten in der Saison dienen nur der Prüfung. Wie das in die Revisionskette passt, steht im <a href="modell.html#produktionskalender-und-revisionskette">Modell, Abschnitt 13</a>.</p>
     <div class="tm-card" style="background:#fff!important;padding:16px 8px 8px">
       <div class="tm-legend" style="padding-left:12px">
         <span><i style="background:#E8E8E8"></i>Wintersaison Okt–Apr</span>
@@ -219,7 +232,7 @@ RP-0417;2027;2;5100;51034.10;0.00</code></pre>
         <tr><td>Abschreibungen, Personal, Zinsen, Steuern</td><td>–</td><td>–</td><td>nicht im Export; keine Vorleistungen</td></tr>
       </tbody>
     </table></div>
-    <p>„Startwert“ heißt: Die Zuordnung zum Kostenverhalten ist nur der Anfang. Das Panel schätzt φ aus den gemessenen Monatsverläufen (Modell, Formel 6.3 als Regression); die Tabelle dient dort als Prüfung und als Rückfall, wenn ein Block zu dünn besetzt ist.</p>
+    <p>„Startwert“ heißt: Die Zuordnung zum Kostenverhalten ist nur der Anfang. Das Panel schätzt φ aus den gemessenen Monatsverläufen (Modell, Formel 6.8); die Tabelle dient dort als Prüfung und als Rückfall, wenn ein Block zu dünn besetzt ist.</p>
 
     <h3 class="tm-h3">A.5 Umsetzung in den Programmen</h3>
     <div class="tm-card tm-tblwrap"><table class="tm-tbl">
@@ -286,15 +299,15 @@ function fmt(x,d){return x.toLocaleString("de-AT",{minimumFractionDigits:d||0,ma
 
 /* ---------- Parameter ---------- */
 var P=[
- {id:"phi",sym:"φ",name:"Kostenverhalten φᶠ, φᴼ, φᵁ",f:"6.3",d:"Anteil fixer, öffnungs- und umsatzabhängiger Vorleistungen; verteilt die Jahreskosten auf die Monate.",heute:"IO-Tabelle, Österreich, ≈ 3 Jahre",panel:"2–3 Monate nach Saisonende"},
- {id:"omega",sym:"ω",name:"Struktur der Vorleistungen ω",f:"6.2",d:"Anteile von Waren, Energie, Fremdleistungen, Miete, Sonstigem; Gewichte der Preisfortschreibung.",heute:"IO-Tabelle, Österreich, ≈ 3 Jahre",panel:"2–3 Monate"},
- {id:"kappa",sym:"κ",name:"Gewicht des Vorsteuer-Signals κ",f:"6.5, 6.6",d:"Mischt Strukturmodell und Vorsteuer-Signal im regulären Stand.",heute:"Startwert 0,5; empirisch erst ab zwei LSE-Jahren",panel:"ab Pilot (24 Monate rückwirkend)"},
- {id:"sbar",sym:"s̄",name:"Effektiver Vorsteuersatz s̄",f:"4.4",d:"Rechnet die Vorsteuer der UVA in Einkäufe um.",heute:"IO-Tabelle, ≈ 3 Jahre",panel:"2–3 Monate"},
- {id:"inv",sym:"inv",name:"Investitionsanteil inv",f:"6.4",d:"Teil der vorsteuerbelasteten Einkäufe, der Investition ist und keine Vorleistung.",heute:"LSE, ≈ 18 Monate",panel:"2–3 Monate"},
- {id:"zus",sym:"zus",name:"Vorleistungen ohne Vorsteuer zus",f:"6.4",d:"Zuschlag für Versicherungen, Bankgebühren, Mieten ohne Umsatzsteuer.",heute:"Bilanzdatenbank, IO-Tabelle, 12 Monate bis 3 Jahre",panel:"2–3 Monate"},
- {id:"mu",sym:"μ",name:"Mengenintensität μ (neu)",f:"6.2 erweitert",d:"Veränderung der realen Vorleistungen je Einheit Produktion, z. B. Energiesparen.",heute:"Annahme konstant; zeigt erst die nächste LSE, ≈ 18 Monate",panel:"2–3 Monate"},
- {id:"pi",sym:"π",name:"Zeitprofil der Vorsteuer π",f:"4.4",d:"Verzögerung zwischen Rechnung und Verbrauch; ersetzt die feste 3-Monats-Glättung und prüft die Kappung.",heute:"gesetzt: je 1/3, Kappung beim 3-fachen Median",panel:"ab Pilot"},
- {id:"w",sym:"w",name:"Gewichte der Hochrechnung w",f:"Panel 4.1",d:"Gleicht die Auswahl der Panelbetriebe nach Branche und Größe aus.",heute:"–",panel:"je Lieferung"}
+ {id:"phi",sym:"φ",name:"Kostenverhalten φᶠ, φᴼ, φᵁ",f:"6.3; Schätzung 6.8",d:"Anteil fixer, öffnungs- und umsatzabhängiger Vorleistungen; verteilt die Jahreskosten auf die Monate.",heute:"IO-Tabelle, Österreich, ≈ 3 Jahre",panel:"2–3 Monate nach Saisonende"},
+ {id:"omega",sym:"ω",name:"Struktur der Vorleistungen ω",f:"6.2; Schätzung 6.10",d:"Anteile von Waren, Energie, Fremdleistungen, Miete, Sonstigem; Gewichte der Preisfortschreibung.",heute:"IO-Tabelle, Österreich, ≈ 3 Jahre",panel:"2–3 Monate"},
+ {id:"kappa",sym:"κ",name:"Gewicht des Vorsteuer-Signals κ",f:"6.5; Schätzung 6.12",d:"Mischt Strukturmodell und Vorsteuer-Signal im regulären Stand.",heute:"Startwert 0,5; empirisch erst ab zwei LSE-Jahren",panel:"ab Pilot (24 Monate rückwirkend)"},
+ {id:"sbar",sym:"s̄",name:"Effektiver Vorsteuersatz s̄",f:"4.4; Schätzung 6.11",d:"Rechnet die Vorsteuer der UVA in Einkäufe um.",heute:"IO-Tabelle, ≈ 3 Jahre",panel:"2–3 Monate"},
+ {id:"inv",sym:"inv",name:"Investitionsanteil inv",f:"6.4; Schätzung 6.11",d:"Teil der vorsteuerbelasteten Einkäufe, der Investition ist und keine Vorleistung.",heute:"LSE, ≈ 18 Monate",panel:"2–3 Monate"},
+ {id:"zus",sym:"zus",name:"Vorleistungen ohne Vorsteuer zus",f:"6.4; Schätzung 6.11",d:"Zuschlag für Versicherungen, Bankgebühren, Mieten ohne Umsatzsteuer.",heute:"Bilanzdatenbank, IO-Tabelle, 12 Monate bis 3 Jahre",panel:"2–3 Monate"},
+ {id:"mu",sym:"μ",name:"Mengenintensität μ",f:"6.2, 6.2a",d:"Veränderung der realen Vorleistungen je Einheit Produktion, z. B. Energiesparen.",heute:"μ = 1 (konstant); Änderung zeigt erst die nächste LSE, ≈ 18 Monate",panel:"2–3 Monate"},
+ {id:"pi",sym:"π",name:"Zeitprofil der Vorsteuer π",f:"4.4; Schätzung 6.13",d:"Verzögerung zwischen Rechnung und Verbrauch; ersetzt die feste 3-Monats-Glättung und prüft die Kappung.",heute:"Startwert je 1/3 (3 Monate), Kappung beim 3-fachen Median",panel:"ab Pilot"},
+ {id:"w",sym:"w",name:"Gewichte der Hochrechnung w",f:"6.7",d:"Gleicht die Auswahl der Panelbetriebe nach Branche und Größe aus.",heute:"–",panel:"je Lieferung"}
 ];
 var PI={};P.forEach(function(p){PI[p.id]=p;});
 

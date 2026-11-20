@@ -285,6 +285,7 @@ details summary{color:var(--red)}
         <tbody data-draw="tbl_durchlauf"></tbody>
       </table>
     </div>
+    <p class="tm-note"><strong>Parameterstand:</strong> Vorleistungsquote und Investitionsanteil aus der LSE, Anteile φ und ω sowie Vorsteuersatz aus der IO-Tabelle, Zuschlag ohne Vorsteuer aus der Bilanzdatenbank, κ als Startwert. Referenzpanel: <span data-draw="c_panel">—</span>. Sobald Panelparameter das Gate G2 bestanden haben, zeigen die Zeilen den gemischten Wert und das Gewicht W (<a href="modell.html#parameter-aus-dem-referenzpanel">Modell, Abschnitt 6.5</a>; <a href="referenzpanel.html">Referenzpanel</a>).</p>
   </section>
 
   <section class="tm-sec" id="ampel">
@@ -437,7 +438,9 @@ details summary{color:var(--red)}
   };
 })();
 </script>
-<script>window.TM = { vlq_gelb: 2.5, vlq_rot: 5, eink_gelb: 5, eink_rot: 10 };
+<script>window.TM = { vlq_gelb: 2.5, vlq_rot: 5, eink_gelb: 5, eink_rot: 10,
+  /* Referenzpanel (Modell, Abschnitt 6.5): im Prototyp nicht aktiv. W = Panelgewicht in der Mischung, mu = Mengenintensität, pi = Gewichte der Vorsteuer-Glättung (t, t−1, t−2). */
+  panel: { aktiv: false, stand: 'kein Panel (Prototyp)', W: 0, mu: 1, pi: [1 / 3, 1 / 3, 1 / 3] } };
 window.TM_LAND = 'Vorarlberg gesamt';
 window.TM_BR = ['Beherbergung', 'Gastronomie', 'Bergbahn + Skischule'];
 const loc = d3.formatLocale({ decimal: ',', thousands: '.', grouping: [3], currency: ['', ' €'] });
@@ -517,8 +520,11 @@ dash.calc('modell', {
         const umsatz = num(r.umsatz_gemeldet) / (1 - q);
         const vorsteuer = (num(r.vorsteuer_gemeldet) - num(r.vorsteuer_kappung)) / (1 - q);
         E.push(vorsteuer / num(p.vst_satz));
-        const w = E.slice(Math.max(0, i - 2));
-        const e_glatt = w.reduce((s, x) => s + x, 0) / w.length;
+        /* Glättung nach Formel 4.4: Ẽ = Σ π_j E_(t−j); am Reihenanfang auf die vorhandenen Monate normiert */
+        const PI = window.TM.panel.pi;
+        let e_s = 0, w_s = 0;
+        PI.forEach((pj, j) => { if (i - j >= 0) { e_s += pj * E[i - j]; w_s += pj; } });
+        const e_glatt = e_s / w_s;
         return {
           monat: r.monat, jahr: r.monat.slice(0, 4), destination: r.destination, branche: b, betriebe: num(r.betriebe),
           umsatz_gemeldet: num(r.umsatz_gemeldet), anteil_quartalszahler: q, umsatz, pw: umsatz,
@@ -542,7 +548,8 @@ dash.calc('modell', {
       zr.forEach((x) => {
         const jw = jahrWert[x.jahr];
         const pf = preisfaktor(b, x.jahr);
-        const v_hat = num(p.v_lse) * pf;
+        const mu = window.TM.panel.mu; /* Mengenintensität, Formel 6.2a; ohne Panel 1 */
+        const v_hat = num(p.v_lse) * pf * mu;
         const fF = num(p.phi_f), fO = num(p.phi_o), fU = num(p.phi_u);
         const anteil = fF / 12 + (jw.o ? fO * x.oeffnungstage / jw.o : 0) + (jw.pw ? fU * x.pw / jw.pw : 0);
         const vl_str = v_hat * jw.pw * anteil;
@@ -550,7 +557,7 @@ dash.calc('modell', {
         const vl = kappa * x.vl_vst + (1 - kappa) * vl_str;
         const al = alphaFuer(b, x.jahr);
         Object.assign(x, {
-          v_lse: num(p.v_lse), lse_jahr: p.lse_jahr, preisfaktor: pf, v_hat, pw_jahr: jw.pw, o_jahr: jw.o, jahr_voll: jw.voll,
+          v_lse: num(p.v_lse), lse_jahr: p.lse_jahr, preisfaktor: pf, mu, v_hat, pw_jahr: jw.pw, o_jahr: jw.o, jahr_voll: jw.voll,
           phi_f: fF, phi_o: fO, phi_u: fU, monatsanteil: anteil, vl_str, kappa, vl, bws_modell: x.pw - vl,
           alpha: al.a, alpha_quelle: al.q, pa: x.lohnsumme * (1 + al.a), lohnquote: num(p.lohnquote), tau_nat: num(p.tau_nat)
         });
@@ -857,16 +864,19 @@ dash.calc('durchlauf', {
       ['1', 'Produktionswert (Umsatz hochgerechnet, z = 0)', 'Modell', 'Mio €', (r) => r.pw, sum('pw'), 2],
       ['2a', 'Vorleistungsquote LSE', 'LSE', '%', (r) => r.v_lse * 100, null, 1],
       ['2a', 'Preisfaktor Vorleistungen ÷ Produktion', 'VPI / ÖSPI / ÖGPI', 'Faktor', (r) => r.preisfaktor, null, 3],
+      ['2a', 'Mengenintensität μ', window.TM.panel.aktiv ? 'Referenzpanel' : 'Startwert (ohne Panel)', 'Faktor', (r) => r.mu, null, 3],
       ['2a', 'Vorleistungsquote fortgeschrieben', 'Modell', '%', (r) => r.v_hat * 100, null, 1],
       ['2a', 'Produktionswert im Jahr (hochgerechnet)', 'Modell', 'Mio €', (r) => r.pw_jahr, sum('pw_jahr'), 1],
       ['2a', 'Anteile fix · öffnungs- · umsatzabhängig', 'IO-Tabelle', '%', (r) => [r.phi_f, r.phi_o, r.phi_u].map((x) => Math.round(x * 100)).join(' · '), null, null],
       ['2a', 'Vorleistungen Strukturmodell', 'Modell', 'Mio €', (r) => r.vl_str, sum('vl_str'), 2],
       ['2b', 'Effektiver Vorsteuersatz', 'IO-Tabelle', '%', (r) => r.vst_satz * 100, null, 1],
-      ['2b', 'Einkäufe netto, geglättet (3 Monate)', 'Modell', 'Mio €', (r) => r.einkaeufe_glatt, sum('einkaeufe_glatt'), 2],
+      ['2b', 'Gewichte der Glättung π (t · t−1 · t−2)', window.TM.panel.aktiv ? 'Referenzpanel' : 'Startwert (ohne Panel)', '%', () => window.TM.panel.pi.map((x) => Math.round(x * 100)).join(' · '), null, null],
+      ['2b', 'Einkäufe netto, geglättet', 'Modell', 'Mio €', (r) => r.einkaeufe_glatt, sum('einkaeufe_glatt'), 2],
       ['2b', 'Investitionsanteil', 'LSE', '%', (r) => r.inv_anteil * 100, null, 1],
       ['2b', 'Zuschlag Vorleistungen ohne Vorsteuer', 'Bilanzdatenbank', '%', (r) => r.zuschlag * 100, null, 1],
       ['2b', 'Vorleistungen Vorsteuer-Signal', 'Modell', 'Mio €', (r) => r.vl_vst, sum('vl_vst'), 2],
       ['2c', 'Gewicht Vorsteuer-Signal κ', 'Startwert', '%', (r) => r.kappa * 100, null, 0],
+      ['2c', 'Panelgewicht W (φ, ω, s̄, inv, zus, κ)', 'Referenzpanel', '%', () => window.TM.panel.W * 100, null, 0],
       ['2c', 'Vorleistungen kombiniert', 'Modell', 'Mio €', (r) => r.vl, sum('vl'), 2],
       ['3', 'BWS (Modell, vor Anbindung)', 'Modell', 'Mio €', (r) => r.bws_modell, sum('bws_modell'), 2],
       ['3', 'Bruttolohnsumme', 'mBGM', 'Mio €', (r) => r.lohnsumme, sum('lohnsumme'), 2],
@@ -915,6 +925,7 @@ dash.draw('sel_monat', (sel) => {
 dash.draw('k_monat', (el) => { el.textContent = window.TM_MON(dash.params().monat || ''); });
 dash.draw('k_dest', (el) => { el.textContent = dash.params().dest === window.TM_LAND ? 'Vorarlberg' : 'die Destination ' + dash.params().dest; });
 dash.draw('k_gebiet', (el) => { el.textContent = dash.params().dest === window.TM_LAND ? 'Vorarlberg' : dash.params().dest; });
+dash.draw('c_panel', (el) => { const q = window.TM.panel; el.textContent = q.stand + ' (W = ' + String(q.W).replace('.', ',') + ', μ = ' + String(q.mu).replace('.', ',') + ', π = je 1/3)'; });
 dash.draw('c_const', (el) => { el.textContent = String(window.TM[el.dataset.key]).replace('.', ','); });
 
 /* ---------- Kennzahlen ---------- */
@@ -1029,7 +1040,7 @@ dash.draw('chart_vergleich', (el) => {
 
 /* ---------- Tabellen ---------- */
 window.TM_QUELLE_FARBE = (q) => {
-  const map = [['Beherbergungsstatistik', 0], ['Gästemeldewesen', 0], ['UVA', 1], ['Statistikstelle', 1], ['Tourismusbeitrag', 1], ['Unternehmensregister', 0], ['mBGM', 2], ['VPI', 2], ['IO-Tabelle', 3], ['LSE', 3], ['Bilanzdatenbank', 3], ['Startwert', 3], ['RGR', 5], ['RTSA', 4]];
+  const map = [['Beherbergungsstatistik', 0], ['Gästemeldewesen', 0], ['UVA', 1], ['Statistikstelle', 1], ['Tourismusbeitrag', 1], ['Unternehmensregister', 0], ['mBGM', 2], ['VPI', 2], ['IO-Tabelle', 3], ['LSE', 3], ['Bilanzdatenbank', 3], ['Startwert', 3], ['RGR', 5], ['RTSA', 4], ['Referenzpanel', 3]];
   const hit = map.find(([k]) => q.startsWith(k));
   return hit ? dash.colors[(hit[1] + 3) % dash.colors.length] : 'var(--color-fg-muted)';
 };
